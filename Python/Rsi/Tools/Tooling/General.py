@@ -6,10 +6,8 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 import numpy as np
-import pandas as pd
 # noinspection PyUnresolvedReferences
 import psutil
-from pandas import DataFrame
 
 from Python.Rsi.Tools.Quotes import file_exists
 
