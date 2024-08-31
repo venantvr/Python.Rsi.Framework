@@ -9,7 +9,6 @@ __all__ = [
     'resolve_path_json_pairs',
     'verify_pair',
     'day_of_week',
-    'set_index',
     'convert_utc_to_local',
     'get_ip_address',
     'serialize_class_reference',

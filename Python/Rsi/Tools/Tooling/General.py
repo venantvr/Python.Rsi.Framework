@@ -35,16 +35,6 @@ def day_of_week():
     return days_of_the_week[current_day_number]
 
 
-def set_index(dataframe: DataFrame):
-    def fix_index(df):
-        df = df[~df.index.duplicated(keep='first')]
-        return df
-
-    dataframe.loc[:, 'timestamp'] = pd.to_datetime(dataframe['timestamp'], utc=True)
-    dataframe = dataframe.set_index('timestamp')
-    return fix_index(dataframe)
-
-
 def convert_utc_to_local(heure_utc_str, fuseau_horaire_local_str):
     """
     Convertit une heure UTC donnée en format hh:mm en heure locale pour un fuseau horaire spécifié.
