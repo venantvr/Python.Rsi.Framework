@@ -1,12 +1,14 @@
 # Tooling/__init__.py
 
 # Importer explicitement les classes, fonctions, etc., que vous voulez exposer
+from .AstLogic import *
 from .General import *
 from .Maths import *
 from .Timeframes import *
 
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = [
+    'AstLogic',
     'resolve_path_json_pairs',
     'verify_pair',
     'day_of_week',

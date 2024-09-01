@@ -3,11 +3,14 @@ import itertools
 import os
 from os import path
 from tempfile import gettempdir
+from typing import Optional
 
 import numpy as np
 from gate_api import CurrencyPair  # Importation de la classe CurrencyPair de l'API Gate.io
 from pandas import DataFrame
 
+from Python.Rsi.Tools.Events.EventStore import EventStore
+from Python.Rsi.Tools.Events.GenericEvent import GenericEvent
 from Python.Rsi.Tools.Quotes import Price
 from Python.Rsi.Tools.Quotes.Currencies import file_exists
 from Python.Rsi.Tools.Types import GateioTimeFrame
@@ -80,6 +83,7 @@ class BotCurrencyPair(CurrencyPair):
         self.__min_price: Price = Price.ZERO  # Prix minimal pour la paire
         self.__max_price: Price = Price.ZERO  # Prix maximal pour la paire
         self.__can_start: bool = False  # Indicateur si le bot peut démarrer
+        self.__event_store: EventStore = EventStore()
         self.directory: str = directory if directory is not None else gettempdir()  # Répertoire de stockage par défaut
         self.active = True  # Indicateur de l'état actif du bot
         self.dataframe_backup: str = path.join(self.__entity_path('dataframes'), f'{self.id.lower()}_backup.csv')  # Chemin du backup des DataFrames
@@ -190,6 +194,48 @@ class BotCurrencyPair(CurrencyPair):
             bool: True si le bot peut démarrer, sinon False.
         """
         return self.__can_start
+
+    def set_event(self, message: dict):
+        """
+        Ajoute un événement au EventStore associé à cette instance.
+
+        Args:
+            message (dict): Le message de l'événement à stocker.
+        """
+        self.__event_store.set_event(message)  # Appelle la méthode set_event de l'objet EventStore pour ajouter l'événement
+
+    def get_event(self, event: str) -> Optional[GenericEvent]:
+        """
+        Récupère un événement spécifique depuis l'EventStore associé à cette instance.
+
+        Args:
+            event (str): Le nom de l'événement à récupérer.
+
+        Returns:
+            Optional[GenericEvent]: L'événement trouvé correspondant ou None s'il n'est pas trouvé.
+        """
+        return self.__event_store.get_event(event)  # Appelle la méthode get_event de l'objet EventStore pour récupérer l'événement
+
+    def get_events(self) -> list[GenericEvent]:
+        """
+        Récupère et retourne une liste d'événements transformés en utilisant des modèles de machine learning (ML).
+
+        Returns:
+            list[GenericEvent]: Une liste d'instances de `GenericEvent` créées à partir des données d'événements stockées.
+        """
+        events = []  # Initialise une liste vide pour stocker les événements
+        for transform_key, items in self.ml_models.items():
+            # Récupère la classe d'événement à partir du dictionnaire des modèles ML
+            event_class: type = items['event']
+            # Récupère les données d'événement associées à la clé de transformation
+            event_data: dict = self.get_event(transform_key)
+
+            if event_data is not None:
+                # Si des données d'événement sont trouvées, crée une instance de la classe d'événement
+                # et l'ajoute à la liste des événements
+                events.append(event_class(event_data))
+
+        return events  # Retourne la liste des événements
 
     def passthrough_condition(self, actor: str, conditions: list[str]):
         """
