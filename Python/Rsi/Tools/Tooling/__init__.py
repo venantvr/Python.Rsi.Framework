@@ -2,6 +2,7 @@
 
 # Importer explicitement les classes, fonctions, etc., que vous voulez exposer
 from .AstLogic import *
+from .Currencies import *
 from .General import *
 from .Maths import *
 from .Response import *
@@ -12,6 +13,7 @@ from .Trigger import *
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = [
     'AstLogic',
+    'gateio_currency_pair',
     'resolve_path_json_pairs',
     'verify_pair',
     'day_of_week',
