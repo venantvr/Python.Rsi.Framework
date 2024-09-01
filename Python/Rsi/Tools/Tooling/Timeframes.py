@@ -1,21 +1,23 @@
 from datetime import datetime
 
-from Python.Rsi.Tools.Types.Alias import GateioTimeFrame, PandasTimeFrame
+from Python.Rsi.Tools.Types.Alias import GateioTimeFrame, PandasTimeFrame  # Import des types personnalisés pour les timeframes
 
 
-def diviser_timeframe(timeframe: GateioTimeFrame, division) -> GateioTimeFrame:
+def diviser_timeframe(timeframe: GateioTimeFrame, division: int) -> GateioTimeFrame:
     """
     Divise un timeframe par un facteur spécifié et renvoie le nouveau timeframe.
 
     Args:
-    timeframe (str): Timeframe à diviser (ex. '1h', '30m').
-    division (int): Facteur de division.
+        timeframe (GateioTimeFrame): Timeframe à diviser (ex. '1h', '30m').
+        division (int): Facteur de division.
 
     Returns:
-    str: Nouveau timeframe divisé.
+        GateioTimeFrame: Nouveau timeframe divisé.
     """
-    unit = timeframe[-1]
-    amount = int(timeframe[:-1])
+    unit = timeframe[-1]  # Extrait l'unité de temps ('m', 'h', 'd')
+    amount = int(timeframe[:-1])  # Extrait la quantité de temps (ex. 1, 30)
+
+    # Convertit le timeframe en minutes totales en fonction de l'unité
     if unit == 'm':
         total_minutes = amount
     elif unit == 'h':
@@ -24,7 +26,10 @@ def diviser_timeframe(timeframe: GateioTimeFrame, division) -> GateioTimeFrame:
         total_minutes = amount * 1440
     else:
         raise ValueError('Unité de timeframe non prise en charge')
-    new_minutes = total_minutes // division
+
+    new_minutes = total_minutes // division  # Divise le total de minutes par le facteur de division
+
+    # Détermine la nouvelle unité et valeur de temps
     if new_minutes % 1440 == 0:
         value = new_minutes // 1440
         unit = 'd'
@@ -34,28 +39,50 @@ def diviser_timeframe(timeframe: GateioTimeFrame, division) -> GateioTimeFrame:
     else:
         value = new_minutes
         unit = 'm'
-    return GateioTimeFrame(f'{value}{unit}')
+
+    return GateioTimeFrame(f'{value}{unit}')  # Retourne le nouveau timeframe
 
 
-def seconds_to_timeframe(seconds) -> GateioTimeFrame:
-    if seconds >= 2592000:
+def seconds_to_timeframe(seconds: int) -> GateioTimeFrame:
+    """
+    Convertit un nombre de secondes en un format de timeframe.
+
+    Args:
+        seconds (int): Nombre de secondes à convertir.
+
+    Returns:
+        GateioTimeFrame: Le timeframe correspondant au nombre de secondes.
+    """
+    if seconds >= 2592000:  # Mois
         output = str(seconds // 2592000) + 'M'
-    elif seconds >= 604800:
+    elif seconds >= 604800:  # Semaine
         output = str(seconds // 604800) + 'w'
-    elif seconds >= 86400:
+    elif seconds >= 86400:  # Jour
         output = str(seconds // 86400) + 'd'
-    elif seconds >= 3600:
+    elif seconds >= 3600:  # Heure
         output = str(seconds // 3600) + 'h'
-    elif seconds >= 60:
+    elif seconds >= 60:  # Minute
         output = str(seconds // 60) + 'm'
-    else:
+    else:  # Seconde
         output = str(seconds) + 's'
+
     return GateioTimeFrame(output)
 
 
-def timeframe_to_seconds(timeframe: GateioTimeFrame):
-    unit = timeframe[-1]
-    amount = int(timeframe[:-1])
+def timeframe_to_seconds(timeframe: GateioTimeFrame) -> int:
+    """
+    Convertit un timeframe en secondes.
+
+    Args:
+        timeframe (GateioTimeFrame): Le timeframe à convertir (ex. '1h', '30m').
+
+    Returns:
+        int: Le nombre de secondes correspondant au timeframe.
+    """
+    unit = timeframe[-1]  # Extrait l'unité de temps
+    amount = int(timeframe[:-1])  # Extrait la quantité de temps
+
+    # Convertit le timeframe en secondes selon l'unité
     if unit == 'm':
         seconds = amount * 60
     elif unit == 'h':
@@ -67,7 +94,8 @@ def timeframe_to_seconds(timeframe: GateioTimeFrame):
     elif unit == 'M':
         seconds = amount * 2592000
     else:
-        seconds = None
+        seconds = None  # Unité non reconnue
+
     return seconds
 
 
@@ -76,17 +104,17 @@ def convert_gateio_timeframe_to_pandas(timeframe: GateioTimeFrame) -> PandasTime
     Convertit un timeframe donné en chaîne de période pour resampling avec pandas.
 
     Args:
-    timeframe (str): Le timeframe à convertir (ex. "1h", "30m", "1d").
+        timeframe (GateioTimeFrame): Le timeframe à convertir (ex. '1h', '30m', '1d').
 
     Returns:
-    str: La chaîne de période correspondante pour utilisation avec pandas.resample().
+        PandasTimeFrame: La chaîne de période correspondante pour utilisation avec pandas.resample().
     """
     # Dictionnaire de correspondance entre les unités de temps et les alias pandas
-    unit_mapping = {'h': 'h', 'm': 'T', 'd': 'D'}  # FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+    unit_mapping = {'h': 'h', 'm': 'T', 'd': 'D'}
 
     # Extraction de la quantité et de l'unité du timeframe
-    quantity = ''.join([char for char in timeframe if char.isdigit()])
-    unit = ''.join([char for char in timeframe if char.isalpha()]).lower()
+    quantity = ''.join([char for char in timeframe if char.isdigit()])  # Quantité (ex. 1, 30)
+    unit = ''.join([char for char in timeframe if char.isalpha()]).lower()  # Unité ('h', 'm', 'd')
 
     # Conversion de l'unité en alias pandas
     pandas_alias = unit_mapping.get(unit, None)
@@ -94,9 +122,18 @@ def convert_gateio_timeframe_to_pandas(timeframe: GateioTimeFrame) -> PandasTime
     if pandas_alias is None:
         raise ValueError(f'Unité de temps non reconnue {unit}')
 
-    return PandasTimeFrame(quantity + pandas_alias)
+    return PandasTimeFrame(quantity + pandas_alias)  # Retourne le timeframe pour pandas
 
 
-def get_seconds_till_close(timeframe_in_seconds):
+def get_seconds_till_close(timeframe_in_seconds: int) -> int:
+    """
+    Calcule le nombre de secondes restantes jusqu'à la fin du timeframe en cours.
+
+    Args:
+        timeframe_in_seconds (int): Le nombre de secondes du timeframe.
+
+    Returns:
+        int: Nombre de secondes restantes jusqu'à la fermeture du timeframe en cours.
+    """
     now = datetime.now()
     return timeframe_in_seconds - (now.minute * 60 + now.second) % timeframe_in_seconds

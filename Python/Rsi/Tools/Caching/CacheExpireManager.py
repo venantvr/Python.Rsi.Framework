@@ -6,6 +6,13 @@ from Python.Rsi.Tools.Types.Alias import GateioTimeFrame
 
 
 class CacheExpireManager:
+    """
+    Classe CacheExpireManager pour gérer les stratégies de mise en cache avec expiration.
+
+    Cette classe gère la mise en cache des valeurs en fonction de différentes politiques de cache,
+    telles que 'system', 'random', et 'close', avec la possibilité de définir des délais d'expiration.
+    """
+
     def __init__(self, cache_expire: CacheExpire, cache_key: str, timeout_in_seconds: int):
         """
         Initialise le gestionnaire de cache avec les paramètres spécifiés.
@@ -15,12 +22,12 @@ class CacheExpireManager:
             cache_key (str): La clé pour stocker/retrouver la valeur dans le cache.
             timeout_in_seconds (int): Le délai d'expiration du cache en secondes.
         """
-        self.cache_expire = cache_expire
-        self.cache_key = cache_key
-        self.timeout_in_seconds = timeout_in_seconds
-        self.triggered_by_timeframe = False
-        self.timeframe_in_seconds = None
-        self.value = None
+        self.cache_expire = cache_expire  # Instance de CacheExpire pour la gestion du cache
+        self.cache_key = cache_key  # Clé utilisée pour stocker/retrouver la valeur dans le cache
+        self.timeout_in_seconds = timeout_in_seconds  # Délai d'expiration par défaut du cache
+        self.triggered_by_timeframe = False  # Indicateur si le cache est déclenché par un intervalle de temps spécifique
+        self.timeframe_in_seconds = None  # Intervalle de temps en secondes (si applicable)
+        self.value = None  # Valeur à mettre en cache ou à récupérer
 
     def set_policy(self, cache_mode: Literal['system', 'random', 'close'], timeframe: Optional[GateioTimeFrame]) -> Self:
         """
@@ -28,14 +35,14 @@ class CacheExpireManager:
 
         Args:
             cache_mode (Literal['system', 'random', 'close']): Mode de mise en cache.
-            timeframe (Optional[str]): L'intervalle de temps pour le mode 'close'.
+            timeframe (Optional[GateioTimeFrame]): L'intervalle de temps pour le mode 'close'.
 
         Returns:
             CacheExpireManager: L'instance actuelle pour permettre le chaînage des méthodes.
         """
         if cache_mode == 'close':
-            self.triggered_by_timeframe = True
-            self.timeframe_in_seconds = timeframe_to_seconds(timeframe)
+            self.triggered_by_timeframe = True  # Active le mode basé sur le timeframe
+            self.timeframe_in_seconds = timeframe_to_seconds(timeframe)  # Convertit le timeframe en secondes
         return self
 
     def __enter__(self):
@@ -45,7 +52,7 @@ class CacheExpireManager:
         Returns:
             tuple: Retourne l'instance elle-même et la valeur récupérée du cache.
         """
-        self.value = self.cache_expire.get(self.cache_key)
+        self.value = self.cache_expire.get(self.cache_key)  # Récupère la valeur du cache
         return self, self.value
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -57,8 +64,9 @@ class CacheExpireManager:
             exc_val: La valeur de l'exception levée (si existant).
             exc_tb: La traceback de l'exception levée (si existant).
         """
-        if self.cache_expire.get(self.cache_key) is None:
-            expire_in_seconds = self.__compute_timeout_in_seconds()
+        if self.cache_expire.get(self.cache_key) is None:  # Vérifie si la valeur est absente du cache
+            expire_in_seconds = self.__compute_timeout_in_seconds()  # Calcule le délai d'expiration
+            # Met en cache la valeur avec le temps d'expiration calculé
             self.cache_expire.set(key=self.cache_key, value=self.value, expire_in_seconds=expire_in_seconds)
 
     def __compute_timeout_in_seconds(self):
@@ -69,8 +77,8 @@ class CacheExpireManager:
             int: Le nombre de secondes avant expiration du cache.
         """
         if not self.triggered_by_timeframe:
-            timeout = self.timeout_in_seconds
+            timeout = self.timeout_in_seconds  # Utilise le délai d'expiration par défaut
         else:
-            seconds_till_close = get_seconds_till_close(self.timeframe_in_seconds)
-            timeout = seconds_till_close
+            seconds_till_close = get_seconds_till_close(self.timeframe_in_seconds)  # Calcule le temps restant jusqu'à la clôture du timeframe
+            timeout = seconds_till_close  # Utilise ce temps comme délai d'expiration
         return timeout
