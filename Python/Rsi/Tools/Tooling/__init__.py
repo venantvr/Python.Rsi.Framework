@@ -2,6 +2,7 @@
 
 # Importer explicitement les classes, fonctions, etc., que vous voulez exposer
 from .General import *
+from .Maths import *
 from .Timeframes import *
 
 # Définir __all__ pour exporter ces noms spécifiques
@@ -16,6 +17,14 @@ __all__ = [
     'default_converter',
     'get_missing_files',
     'list_diff',
+    'round_up',
+    'round_down',
+    'pourcentage_value',
+    'pourcentage_to_stoploss_indice',
+    'pourcentage_to_profit_indice',
+    'pourcentage_to_max_quote_indice',
+    'pct',
+    'resample',
     'diviser_timeframe',
     'seconds_to_timeframe',
     'timeframe_to_seconds',

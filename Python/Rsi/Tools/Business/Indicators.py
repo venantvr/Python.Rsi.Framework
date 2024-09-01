@@ -2,9 +2,10 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
+from pandas import DataFrame, Series
+
 from Python.Rsi.Tools.Business import BotCurrencyPair
 from Python.Rsi.Tools.Types import GateioTimeFrame
-from pandas import DataFrame, Series
 
 
 def remove_nan(dataframe_column: Series):
