@@ -4,7 +4,10 @@
 from .AstLogic import *
 from .General import *
 from .Maths import *
+from .Response import *
+from .State import *
 from .Timeframes import *
+from .Trigger import *
 
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = [
@@ -27,8 +30,11 @@ __all__ = [
     'pourcentage_to_max_quote_indice',
     'pct',
     'resample',
+    'Response',
+    'State',
     'diviser_timeframe',
     'seconds_to_timeframe',
     'timeframe_to_seconds',
     'convert_gateio_timeframe_to_pandas',
-    'get_seconds_till_close']
+    'get_seconds_till_close',
+    'Trigger']

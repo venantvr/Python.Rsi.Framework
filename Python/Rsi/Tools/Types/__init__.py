@@ -5,4 +5,6 @@ from .Alias import *
 
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = ['GateioTimeFrame',
-           'PandasTimeFrame']
+           'PandasTimeFrame',
+           'CandlesCountLambda',
+           'DataframeLambda']
