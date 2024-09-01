@@ -6,6 +6,7 @@ from .Currencies import *
 from .General import *
 from .Maths import *
 from .Response import *
+from .SecurityWait import *
 from .State import *
 from .Timeframes import *
 from .Trigger import *
@@ -33,6 +34,7 @@ __all__ = [
     'pct',
     'resample',
     'Response',
+    'SecurityWait',
     'State',
     'diviser_timeframe',
     'seconds_to_timeframe',
