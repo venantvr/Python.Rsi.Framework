@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 
-from Python.Rsi.Tools.Dataframes import ColumnsManager
+from Python.Rsi.Tools.Dataframes import TemporaryColumnsManager
 
 
 def adjust_iteratively(dataframe: DataFrame, column: str, bottom: float, top: float, iterations=100):
@@ -77,7 +77,7 @@ def check_all_conditions(df: DataFrame, columns: list, window: int):
 
     # Utilisation d'un gestionnaire de contexte personnalisé (ColumnsManager)
     # pour manipuler le DataFrame de manière sécurisée et propre.
-    with ColumnsManager(dataframe=df, drop=[]) as df:
+    with TemporaryColumnsManager(dataframe=df, drop=[]) as df:
         # Initialiser la colonne de marquage 'consecutive' à False pour toutes les lignes
         df[consecutive] = False
 

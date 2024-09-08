@@ -13,16 +13,16 @@ class CacheExpireManager:
     telles que 'system', 'random', et 'close', avec la possibilité de définir des délais d'expiration.
 
     ### Correspondance des noms (Ancien → Nouveau → Signification)
-    | Ancien Nom               | Nouveau Nom                            | Signification                                                   |
-    |--------------------------|----------------------------------------|-----------------------------------------------------------------|
-    | `self.cache_expire`       | `cache_manager`                        | Instance de CacheExpire pour gérer la mise en cache              |
-    | `self.cache_key`          | `cache_identifier`                     | Clé unique utilisée pour identifier une entrée de cache          |
-    | `self.timeout_in_seconds` | `default_cache_timeout`                | Délai d'expiration par défaut du cache                           |
-    | `self.triggered_by_timeframe` | `is_timeframe_based`               | Indique si le cache est basé sur un intervalle de temps          |
-    | `self.timeframe_in_seconds`| `timeframe_duration_in_seconds`       | Intervalle de temps converti en secondes                         |
-    | `self.value`              | `cached_value`                         | Valeur à mettre en cache ou à récupérer                          |
-    | `set_policy`              | `set_caching_policy`                   | Définit la politique de mise en cache                            |
-    | `__compute_timeout_in_seconds` | `calculate_cache_timeout_in_seconds` | Calcule le délai d'expiration en fonction de la politique         |
+    | Ancien Nom                     | Nouveau Nom                            | Signification                                                   |
+    |--------------------------------|----------------------------------------|-----------------------------------------------------------------|
+    | `self.cache_expire`            | `cache_manager`                        | Instance de CacheExpire pour gérer la mise en cache             |
+    | `self.cache_key`               | `cache_identifier`                     | Clé unique utilisée pour identifier une entrée de cache         |
+    | `self.timeout_in_seconds`      | `default_cache_timeout`                | Délai d'expiration par défaut du cache                          |
+    | `self.triggered_by_timeframe`  | `is_timeframe_based`                   | Indique si le cache est basé sur un intervalle de temps         |
+    | `self.timeframe_in_seconds`    | `timeframe_duration_in_seconds`        | Intervalle de temps converti en secondes                        |
+    | `self.value`                   | `cached_value`                         | Valeur à mettre en cache ou à récupérer                         |
+    | `set_policy`                   | `set_caching_policy`                   | Définit la politique de mise en cache                           |
+    | `__compute_timeout_in_seconds` | `calculate_cache_timeout_in_seconds`   | Calcule le délai d'expiration en fonction de la politique       |
     """
 
     def __init__(self, cache_expire: CacheExpire, cache_key: str, timeout_in_seconds: int):

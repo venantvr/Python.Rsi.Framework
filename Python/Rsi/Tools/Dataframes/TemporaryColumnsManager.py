@@ -3,12 +3,21 @@ import warnings
 from pandas import DataFrame
 
 
-class ColumnsManager:
+class TemporaryColumnsManager:
     """
     Classe ColumnsManager pour gérer les colonnes temporaires dans un DataFrame de manière contextuelle.
 
     Cette classe permet d'assurer la présence de colonnes temporaires pendant une opération spécifique
     et de les supprimer à la fin de cette opération.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom         | Nouveau Nom        | Signification                                                                     |
+    |--------------------|--------------------|-----------------------------------------------------------------------------------|
+    | `df`               | `df`               | DataFrame à manipuler                                                             |
+    | `keep_temp_columns`| `keep_temp_columns`| Liste des colonnes à conserver après l'opération                                  |
+    | `drop_temp_columns`| `drop_temp_columns`| Liste des colonnes à supprimer après l'opération                                  |
+    | `__enter__`        | `__enter__`        | Méthode pour assurer la présence des colonnes avant l'opération contextuelle      |
+    | `__exit__`         | `__exit__`         | Méthode pour supprimer ou conserver les colonnes après l'opération contextuelle   |
     """
 
     def __init__(self, dataframe: DataFrame, keep: list = None, drop: list = None):
@@ -58,4 +67,3 @@ class ColumnsManager:
             # Sinon, on conserve uniquement les colonnes spécifiées dans keep_temp_columns
             columns = self.df.columns
             self.df.drop(columns=columns.difference(self.keep_temp_columns), inplace=True)
-

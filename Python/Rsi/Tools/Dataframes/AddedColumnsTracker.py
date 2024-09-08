@@ -1,10 +1,18 @@
 from pandas import DataFrame
 
 
-class NewColumnsTracker:
+class AddedColumnsTracker:
     """
     Classe NewColumnsTracker pour suivre les nouvelles colonnes ajoutées à un DataFrame
     pendant l'exécution d'un bloc de code.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom        | Nouveau Nom        | Signification                                                              |
+    |-------------------|--------------------|----------------------------------------------------------------------------|
+    | `dataframe`       | `dataframe`        | DataFrame à surveiller pour détecter les nouvelles colonnes ajoutées       |
+    | `target_set`      | `target_set`       | Ensemble où les nouvelles colonnes seront enregistrées                     |
+    | `initial_columns` | `initial_columns`  | Ensemble des colonnes existantes avant l'ajout de nouvelles colonnes       |
+    | `new_columns`     | `new_columns`      | Colonnes ajoutées au DataFrame pendant l'exécution du bloc                 |
 
     Cette classe permet de surveiller les colonnes qui sont ajoutées au DataFrame et
     d'enregistrer ces nouvelles colonnes dans un ensemble cible (`target_set`).

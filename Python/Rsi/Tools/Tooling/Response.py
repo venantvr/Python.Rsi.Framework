@@ -4,6 +4,14 @@ class Response:
 
     Cette classe fournit des méthodes pour stocker, mettre à jour, récupérer, et manipuler
     les données de réponse sous forme de dictionnaire.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom       | Nouveau Nom       | Signification                                                                  |
+    |------------------|-------------------|--------------------------------------------------------------------------------|
+    | `__response`     | `__response`      | Attribut privé pour stocker les données de réponse sous forme de dictionnaire  |
+    | `refresh`        | `refresh`         | Méthode pour mettre à jour les données de réponse avec un nouveau dictionnaire |
+    | `retrieve`       | `retrieve`        | Méthode pour récupérer les données de réponse actuelles                        |
+    | `common_targets` | `common_targets`  | Méthode pour calculer l'intersection entre les cibles actuelles et nouvelles   |
     """
 
     def __init__(self):

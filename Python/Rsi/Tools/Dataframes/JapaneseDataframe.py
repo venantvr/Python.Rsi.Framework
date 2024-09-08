@@ -5,6 +5,15 @@ class JapaneseDataframe(DataFrame):
     """
     Une sous-classe de pandas DataFrame pour représenter des données spécifiques au format japonais ou
     pour ajouter des fonctionnalités supplémentaires adaptées aux besoins spécifiques.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom        | Nouveau Nom        | Signification                                                              |
+    |-------------------|--------------------|----------------------------------------------------------------------------|
+    | `data`            | `data`             | Données utilisées pour créer le DataFrame                                  |
+    | `*args`           | `*args`            | Arguments supplémentaires pour pandas DataFrame                            |
+    | `**kwargs`        | `**kwargs`         | Arguments nommés supplémentaires pour pandas DataFrame                     |
+    | `df`              | `df`               | DataFrame pandas existant à convertir en JapaneseDataframe                 |
+
     """
 
     def __init__(self, data, *args, **kwargs):
