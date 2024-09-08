@@ -9,10 +9,10 @@ from .OrderTrack import *
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = ['BotCurrencyPair',
            'BullishContext',
-           'remove_nan',
-           'calculate_rsi',
-           'calculate_ema',
-           'hourly_volume',
+           'replace_nan_values',
+           'calculate_relative_strength_index',
+           'calculate_exponential_moving_average',
+           'calculate_hourly_volume',
            'Track',
            'OrderTrack',
            ]
