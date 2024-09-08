@@ -1,10 +1,10 @@
 # Dataframes/__init__.py
 
 # Importer explicitement les classes, fonctions, etc., que vous voulez exposer
-from .TemporaryColumnsManager import *
+from .AddedColumnsTracker import *
 from .General import *
 from .JapaneseDataframe import *
-from .AddedColumnsTracker import *
+from .TemporaryColumnsManager import *
 
 # Définir __all__ pour exporter ces noms spécifiques
 __all__ = ['TemporaryColumnsManager',

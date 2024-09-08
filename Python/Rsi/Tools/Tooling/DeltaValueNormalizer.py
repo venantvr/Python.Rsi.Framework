@@ -24,6 +24,7 @@ class DeltaValueNormalizer:
 
     """
 
+    # noinspection PyUnresolvedReferences
     def __init__(self, column_weight_mapping: dict, dataframe_adjuster: TimeframeAdjuster):
         """
         Initialise l'instance de DeltaValueNormalizer.

@@ -29,7 +29,7 @@ class Parameters:
 
     configuration_path = None
     script_path = None
-    __instance = None
+    singleton_instance = None
     yaml = {}
 
     @staticmethod
@@ -50,8 +50,8 @@ class Parameters:
             return None
 
     def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super(Parameters, cls).__new__(cls)
+        if cls.singleton_instance is None:
+            cls.singleton_instance = super(Parameters, cls).__new__(cls)
             current_directory = os.getcwd()
             cls.script_path: str = str(cls.find_git_root_directory(current_directory))
             parsed_args = Parameters.get_instance().parse_command_line_arguments()
@@ -78,7 +78,7 @@ class Parameters:
             cls.target_tokens_yaml = target_tokens_yaml
             cls.forbidden = target_tokens_configuration['forbidden']
             cls.port = parsed_args.port
-        return cls.__instance
+        return cls.singleton_instance
 
     @staticmethod
     def update_file_path_with_extension(file_path, new_directory, new_extension):
@@ -121,16 +121,16 @@ class Parameters:
         Returns:
             Parameters: L'instance singleton de Parameters.
         """
-        if cls.__instance is None:
-            cls.__instance = cls()
-        return cls.__instance
+        if cls.singleton_instance is None:
+            cls.singleton_instance = cls()
+        return cls.singleton_instance
 
     @classmethod
     def reset_singleton_instance(cls):
         """
         Réinitialise l'instance singleton à None.
         """
-        cls.__instance = None
+        cls.singleton_instance = None
 
     @classmethod
     def handle_yaml_file_inclusion(cls, loader, node):

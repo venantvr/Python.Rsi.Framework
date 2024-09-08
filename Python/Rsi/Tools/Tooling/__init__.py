@@ -3,11 +3,15 @@
 # Importer explicitement les classes, fonctions, etc., que vous voulez exposer
 from .AstLogic import *
 from .Currencies import *
+from .DatabaseManager import *
+from .DeltaValueNormalizer import *
 from .General import *
 from .Maths import *
 from .Response import *
 from .SecurityWait import *
 from .State import *
+from .TelegramNotificationService import *
+from .TimeframeAdjuster import *
 from .Timeframes import *
 from .Trigger import *
 
@@ -15,6 +19,7 @@ from .Trigger import *
 __all__ = [
     'AstLogic',
     'gateio_currency_pair',
+    'DatabaseManager',
     'DeltaValueNormalizer',
     'resolve_path_json_pairs',
     'verify_pair',
@@ -37,6 +42,7 @@ __all__ = [
     'Response',
     'SecurityWait',
     'State',
+    'TelegramNotificationService',
     'TimeframeAdjuster',
     'diviser_timeframe',
     'seconds_to_timeframe',
