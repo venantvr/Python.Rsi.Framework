@@ -14,5 +14,6 @@ __all__ = ['BotCurrencyPair',
            'calculate_exponential_moving_average',
            'calculate_hourly_volume',
            'Track',
+           'ListOfAssets',
            'OrderTrack',
            ]

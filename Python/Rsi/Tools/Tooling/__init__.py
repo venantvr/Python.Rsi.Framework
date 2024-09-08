@@ -15,6 +15,7 @@ from .Trigger import *
 __all__ = [
     'AstLogic',
     'gateio_currency_pair',
+    'DeltaValueNormalizer',
     'resolve_path_json_pairs',
     'verify_pair',
     'day_of_week',
@@ -36,6 +37,7 @@ __all__ = [
     'Response',
     'SecurityWait',
     'State',
+    'TimeframeAdjuster',
     'diviser_timeframe',
     'seconds_to_timeframe',
     'timeframe_to_seconds',
