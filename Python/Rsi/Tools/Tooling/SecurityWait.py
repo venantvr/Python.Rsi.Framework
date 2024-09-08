@@ -11,6 +11,22 @@ class SecurityWait(Parameterized('bot')):
     qui charge les paramètres de configuration pour le bot à partir de la section 'bot' du fichier de configuration.
     Elle est utilisée pour gérer les paires de devises en attente dans un système de trading, avec une logique
     de swap pour déterminer quand la file d'attente est remplie.
+
+    Attributs:
+        currency_pairs (list): Liste des identifiants des paires de devises actuellement en attente.
+        currency_pairs_before_swap (int): Nombre de paires de devises avant de déclencher un swap.
+
+    Méthodes:
+        add(currency_pair: BotCurrencyPair): Ajoute une paire de devises à la file d'attente de sécurité.
+        is_over(debug=False): Vérifie si la file d'attente est remplie selon les paramètres configurés.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom                   | Nouveau Nom                  | Signification                                                 |
+    |------------------------------|------------------------------|---------------------------------------------------------------|
+    | `currency_pairs`             | `currency_pairs`             | Liste des identifiants des paires de devises en attente       |
+    | `currency_pairs_before_swap` | `currency_pairs_before_swap` | Nombre de paires avant de déclencher un swap                  |
+    | `add`                        | `add`                        | Ajoute une paire de devises à la liste d'attente              |
+    | `is_over`                    | `is_over`                    | Détermine si la liste des devises en attente est remplie      |
     """
 
     def __init__(self):

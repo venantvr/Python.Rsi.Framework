@@ -33,3 +33,13 @@ class Trigger:
             valeur (bool): La nouvelle valeur pour l'état activé/désactivé.
         """
         self.__activated = valeur  # Met à jour l'état avec la nouvelle valeur fournie
+
+
+"""
+### Correspondance des noms (Ancien → Nouveau → Signification)
+| Ancien Nom            | Nouveau Nom            | Signification                                                                 |
+|-----------------------|------------------------|-------------------------------------------------------------------------------|
+| `__activated`         | `__activated`           | Variable privée pour stocker l'état activé ou désactivé de l'objet `Trigger` |
+| `forced` (getter)     | `forced` (getter)       | Propriété pour obtenir l'état activé/désactivé puis réinitialiser l'état     |
+| `forced` (setter)     | `forced` (setter)       | Propriété pour définir l'état activé ou désactivé                            |
+"""

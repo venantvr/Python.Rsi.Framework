@@ -1,7 +1,5 @@
 import math
-
 from pandas import DataFrame
-
 from Python.Rsi.Tools.Quotes import Price
 from Python.Rsi.Tools.Tooling import convert_gateio_timeframe_to_pandas
 from Python.Rsi.Tools.Types import GateioTimeFrame, PandasTimeFrame
@@ -37,7 +35,7 @@ def round_down(value, decimals=4):
     return math.floor(value * factor) / factor
 
 
-def pourcentage_value(percentage: str):
+def convert_percentage_to_decimal(percentage: str):
     """
     Convertit une chaîne de pourcentage en une valeur décimale.
 
@@ -50,7 +48,7 @@ def pourcentage_value(percentage: str):
     return float(percentage.strip('%'))
 
 
-def pourcentage_to_stoploss_indice(percentage: str):
+def calculate_stoploss_index(percentage: str):
     """
     Calcule l'indice de stop-loss à partir d'un pourcentage donné.
 
@@ -60,10 +58,10 @@ def pourcentage_to_stoploss_indice(percentage: str):
     Returns:
         float: L'indice de stop-loss calculé.
     """
-    return (100.0 - pourcentage_value(percentage)) / 100.0
+    return (100.0 - convert_percentage_to_decimal(percentage)) / 100.0
 
 
-def pourcentage_to_profit_indice(percentage: str):
+def calculate_profit_index(percentage: str):
     """
     Calcule l'indice de profit à partir d'un pourcentage donné.
 
@@ -73,10 +71,10 @@ def pourcentage_to_profit_indice(percentage: str):
     Returns:
         float: L'indice de profit calculé.
     """
-    return (100.0 + pourcentage_value(percentage)) / 100.0
+    return (100.0 + convert_percentage_to_decimal(percentage)) / 100.0
 
 
-def pourcentage_to_max_quote_indice(percentage: str):
+def calculate_max_quote_index(percentage: str):
     """
     Calcule l'indice de quote maximum à partir d'un pourcentage donné.
 
@@ -86,10 +84,10 @@ def pourcentage_to_max_quote_indice(percentage: str):
     Returns:
         float: L'indice de quote maximum calculé.
     """
-    return pourcentage_value(percentage) / 100.0
+    return convert_percentage_to_decimal(percentage) / 100.0
 
 
-def pct(a: float | Price, b: float | Price) -> float:
+def calculate_percentage(a: float | Price, b: float | Price) -> float:
     """
     Calcule le pourcentage de `a` par rapport à `b`.
 
@@ -107,7 +105,7 @@ def pct(a: float | Price, b: float | Price) -> float:
     return round(100.0 * a / b, 2)
 
 
-def resample(dataframe: DataFrame, resample_period: GateioTimeFrame, expected_length: int):
+def resample_dataframe(dataframe: DataFrame, resample_period: GateioTimeFrame, expected_length: int):
     """
     Resample un DataFrame sur une période donnée et retourne le nombre de lignes attendu.
 
@@ -120,8 +118,21 @@ def resample(dataframe: DataFrame, resample_period: GateioTimeFrame, expected_le
         tuple: Un tuple contenant le DataFrame resamplé et le DataFrame original.
     """
     pandas_period: PandasTimeFrame = convert_gateio_timeframe_to_pandas(resample_period)
-    original = dataframe.copy()  # Copie le DataFrame original pour une utilisation ultérieure
+    original_dataframe = dataframe.copy()  # Copie le DataFrame original pour une utilisation ultérieure
     dataframe = (dataframe.resample(pandas_period, closed='right')
                  .agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last', 'volume': 'sum'}))
-    output: DataFrame = dataframe.tail(expected_length)  # Récupère les dernières lignes après le resampling
-    return output, original  # Retourne le DataFrame resamplé et le DataFrame original
+    resampled_dataframe: DataFrame = dataframe.tail(expected_length)  # Récupère les dernières lignes après le resampling
+    return resampled_dataframe, original_dataframe  # Retourne le DataFrame resamplé et le DataFrame original
+
+
+"""
+### Correspondance des noms (Ancien → Nouveau → Signification)
+| Ancien Nom                       | Nouveau Nom                      | Signification                                                   |
+|----------------------------------|----------------------------------|-----------------------------------------------------------------|
+| `pourcentage_value`              | `convert_percentage_to_decimal`  | Convertit une chaîne de pourcentage en valeur décimale          |
+| `pourcentage_to_stoploss_indice` | `calculate_stoploss_index`       | Calcule l'indice de stop-loss à partir d'un pourcentage         |
+| `pourcentage_to_profit_indice`   | `calculate_profit_index`         | Calcule l'indice de profit à partir d'un pourcentage            |
+| `pourcentage_to_max_quote_indice`| `calculate_max_quote_index`      | Calcule l'indice de quote maximum à partir d'un pourcentage     |
+| `pct`                            | `calculate_percentage`           | Calcule le pourcentage de `a` par rapport à `b`                 |
+| `resample`                       | `resample_dataframe`             | Resample un DataFrame sur une période donnée                    |
+"""

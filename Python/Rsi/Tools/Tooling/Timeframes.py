@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from Python.Rsi.Tools.Types.Alias import GateioTimeFrame, PandasTimeFrame  # Import des types personnalisés pour les timeframes
 
 
@@ -137,3 +136,15 @@ def get_seconds_till_close(timeframe_in_seconds: int) -> int:
     """
     now = datetime.now()
     return timeframe_in_seconds - (now.minute * 60 + now.second) % timeframe_in_seconds
+
+
+"""
+### Correspondance des noms (Ancien → Nouveau → Signification)
+| Ancien Nom                           | Nouveau Nom                             | Signification                                                      |
+|--------------------------------------|-----------------------------------------|--------------------------------------------------------------------|
+| `diviser_timeframe`                  | `diviser_timeframe`                     | Divise un timeframe par un facteur spécifié                        |
+| `seconds_to_timeframe`               | `seconds_to_timeframe`                  | Convertit un nombre de secondes en un timeframe                    |
+| `timeframe_to_seconds`               | `timeframe_to_seconds`                  | Convertit un timeframe en secondes                                 |
+| `convert_gateio_timeframe_to_pandas` | `convert_gateio_timeframe_to_pandas`    | Convertit un timeframe Gate.io en un format Pandas                 |
+| `get_seconds_till_close`             | `get_seconds_till_close`                | Calcule le nombre de secondes restantes avant la fin du timeframe  |
+"""
