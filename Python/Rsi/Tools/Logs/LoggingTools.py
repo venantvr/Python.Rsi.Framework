@@ -26,7 +26,7 @@ class LoggingTools:
                 - enabled (bool): Un indicateur qui spécifie si le logging est activé.
                 - log_file_path (str): Le chemin du fichier de log où les messages de journalisation doivent être enregistrés.
         """
-        parameters = Parameters.get()  # Récupère l'instance singleton de Parameters
+        parameters = Parameters.get_instance()  # Récupère l'instance singleton de Parameters
         configuration_values = parameters.yaml  # Accède aux paramètres de configuration YAML chargés
         # Retourne l'état d'activation du logging et le chemin du fichier de log
         return configuration_values['bot']['log']['enabled'], parameters.log_file

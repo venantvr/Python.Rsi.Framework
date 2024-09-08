@@ -38,7 +38,7 @@ def gateio_currency_pair(pair_symbol: str, keep_pair_quote: bool, trading_quote)
 
     # Crée et retourne l'objet BotCurrencyPair si base et quote sont différents
     if base != quote:
-        parameters = Parameters.get()  # Obtient les paramètres de configuration
+        parameters = Parameters.get_instance()  # Obtient les paramètres de configuration
         # Construit le chemin du répertoire pour le stockage des logs du bot
         directory = os.path.join(parameters.parsed_args.logs, 'Python.Rsi.Bot')
 

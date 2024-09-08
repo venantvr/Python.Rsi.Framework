@@ -29,7 +29,7 @@ def Parameterized(base_name):
             extrait la section spécifique définie par base_name.
             """
             self.key = base_name  # Stocke le nom de la section
-            self.get = Parameters.get()  # Récupère l'instance singleton de Parameters
+            self.get = Parameters.get_instance()  # Récupère l'instance singleton de Parameters
             parameters = self.get.yaml  # Accède aux paramètres de configuration YAML
             self.section = parameters[self.key]  # Charge la section spécifique des paramètres
 
