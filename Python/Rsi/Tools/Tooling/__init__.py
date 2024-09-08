@@ -7,6 +7,7 @@ from .DatabaseManager import *
 from .DeltaValueNormalizer import *
 from .General import *
 from .Maths import *
+from .MatplotlibBackendSwitcher import *
 from .Response import *
 from .SecurityWait import *
 from .State import *
@@ -39,6 +40,7 @@ __all__ = [
     'calculate_max_quote_index',
     'calculate_percentage',
     'resample_dataframe',
+    'MatplotlibBackendSwitcher',
     'Response',
     'SecurityWait',
     'State',

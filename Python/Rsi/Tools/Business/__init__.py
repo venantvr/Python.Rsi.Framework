@@ -23,5 +23,5 @@ __all__ = ['BotCurrencyPair',
            'fetch_popular_currency_pairs',
            'fetch_top_gainers',
            'fetch_most_profitable_currency_pairs',
-           'fetch_trending_currency_pairs',
+           'fetch_trending_currency_pairs'
            ]
