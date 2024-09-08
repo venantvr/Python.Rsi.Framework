@@ -98,7 +98,7 @@ def get_wifi_name():
 
 
 # Obtient les paramètres de configuration de logging
-enabled, file = LoggingTools.get_logging_settings()
+enabled, file = LoggingTools.retrieve_logging_configuration()
 
 if not enabled:
     logging_exceptions = logging.CRITICAL + 1

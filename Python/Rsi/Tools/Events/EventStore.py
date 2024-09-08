@@ -12,6 +12,15 @@ class EventStore(dict):
 
     Hérite de la classe dict, ce qui permet de stocker des événements comme des paires clé-valeur
     où la clé est un identifiant de thread ou un identifiant de bot, et la valeur est une liste d'événements.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom             | Nouveau Nom                           | Signification                                                          |
+    |------------------------|---------------------------------------|------------------------------------------------------------------------|
+    | `self.bot`             | `default_bot_identifier`              | Identifiant par défaut pour le bot utilisé pour stocker les événements |
+    | `to_json`              | `serialize_to_json`                   | Sérialise le store d'événements en JSON                                |
+    | `from_json`            | `deserialize_from_json`               | Désérialise une chaîne JSON en EventStore                              |
+    | `set_event`            | `add_event_to_store`                  | Ajoute un événement au store avec un timestamp en UTC                  |
+    | `get_event`            | `retrieve_event`                      | Récupère un événement correspondant à une clé spécifique               |
     """
 
     def __init__(self, *args, **kwargs):
@@ -23,9 +32,9 @@ class EventStore(dict):
             **kwargs: Arguments nommés pour initialiser le dictionnaire parent.
         """
         super().__init__(*args, **kwargs)
-        self.bot = 'Python.Rsi.Bot'  # Identifiant par défaut pour le bot utilisé pour le stockage des événements
+        self.default_bot_identifier = 'Python.Rsi.Bot'  # Identifiant par défaut pour le bot utilisé pour le stockage des événements
 
-    def to_json(self):
+    def serialize_to_json(self):
         """
         Sérialise l'objet EventStore en une chaîne JSON.
 
@@ -35,7 +44,7 @@ class EventStore(dict):
         return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False)
 
     @classmethod
-    def from_json(cls, json_str):
+    def deserialize_from_json(cls, json_str):
         """
         Désérialise une chaîne JSON en une instance de EventStore.
 
@@ -48,10 +57,9 @@ class EventStore(dict):
         # Convertit la chaîne JSON en un dictionnaire Python standard
         data = json.loads(json_str)
         # Crée une instance de EventStore à partir du dictionnaire
-        # Remarque : Ceci suppose que la structure du dictionnaire est compatible avec EventStore
         return cls(data)
 
-    def set_event(self, message: dict, use_thread: bool = False):
+    def add_event_to_store(self, message: dict, use_thread: bool = False):
         """
         Ajoute un événement au store avec un timestamp actuel en UTC.
 
@@ -61,7 +69,7 @@ class EventStore(dict):
                                          sinon utilise l'identifiant du bot (par défaut False).
         """
         # Détermine la clé à utiliser (identifiant du thread ou du bot)
-        thread = threading.get_ident() if use_thread else self.bot
+        thread = threading.get_ident() if use_thread else self.default_bot_identifier
         now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S %Z')  # Heure actuelle en UTC
         if thread not in self:
             self[thread] = []  # Initialise une liste pour ce thread si elle n'existe pas déjà
@@ -69,7 +77,7 @@ class EventStore(dict):
         # Ajoute un nouvel événement au début de la liste pour ce thread
         array.insert(0, {'date': now_utc, 'message': message})
 
-    def get_event(self, event: str, use_thread: bool = False) -> Optional[GenericEvent]:
+    def retrieve_event(self, event: str, use_thread: bool = False) -> Optional[GenericEvent]:
         """
         Récupère le premier événement correspondant à une clé donnée.
 
@@ -82,7 +90,7 @@ class EventStore(dict):
             Optional[GenericEvent]: L'événement trouvé correspondant, ou None s'il n'est pas trouvé.
         """
         # Détermine la clé à utiliser (identifiant du thread ou du bot)
-        thread = threading.get_ident() if use_thread else self.bot
+        thread = threading.get_ident() if use_thread else self.default_bot_identifier
         if thread not in self:
             self[thread] = []  # Initialise une liste pour ce thread si elle n'existe pas déjà
 

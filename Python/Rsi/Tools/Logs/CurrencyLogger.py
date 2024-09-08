@@ -1,6 +1,5 @@
 # Définir une sous-classe de logging.Logger
 import logging
-
 from Python.Rsi.Tools.Business import BotCurrencyPair
 
 
@@ -10,9 +9,15 @@ class CurrencyLogger(logging.Logger):
 
     Cette classe étend la classe standard `logging.Logger` pour fournir des méthodes de journalisation personnalisées
     qui incluent des informations spécifiques sur les paires de devises (`BotCurrencyPair`).
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom                | Nouveau Nom                        | Signification                                                   |
+    |---------------------------|------------------------------------|-----------------------------------------------------------------|
+    | `log_warning_for`         | `log_currency_warning`             | Journalise un message de niveau WARNING pour une devise         |
+    | `log_info_for`            | `log_currency_info`                | Journalise un message de niveau INFO pour une devise            |
     """
 
-    def log_warning_for(self, currency_pair: BotCurrencyPair, message):
+    def log_currency_warning(self, currency_pair: BotCurrencyPair, message):
         """
         Journalise un message de niveau WARNING pour une paire de devises spécifique.
 
@@ -23,7 +28,7 @@ class CurrencyLogger(logging.Logger):
         # Utilise la méthode warning de Logger pour journaliser un message au niveau WARNING
         self.warning(f'{currency_pair} : {message}')
 
-    def log_info_for(self, currency_pair: BotCurrencyPair, message):
+    def log_currency_info(self, currency_pair: BotCurrencyPair, message):
         """
         Journalise un message de niveau INFO pour une paire de devises spécifique.
 

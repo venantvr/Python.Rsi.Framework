@@ -59,5 +59,3 @@ class ColumnsManager:
             columns = self.df.columns
             self.df.drop(columns=columns.difference(self.keep_temp_columns), inplace=True)
 
-        # Utilisé uniquement pour ignorer l'avertissement 'PyUnusedLocal'
-        stop = True

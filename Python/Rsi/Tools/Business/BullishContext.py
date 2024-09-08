@@ -12,6 +12,12 @@ class BullishContext:
 
     Cette classe utilise le protocole de gestion de contexte (avec les méthodes __enter__ et __exit__)
     pour encapsuler l'application d'une fonction sur une liste d'actifs de type BotCurrencyPair.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom                | Nouveau Nom                          | Signification                                                      |
+    |---------------------------|--------------------------------------|--------------------------------------------------------------------|
+    | `__bullish_function`      | `bullish_transformation_function`    | Fonction bullish appliquée à la liste d'actifs                     |
+    | `__assets`                | `currency_pairs_assets`              | Liste des actifs (paires de devises) sur lesquels opérer           |
     """
 
     def __init__(self, bullish_function: BullishFunctionType, assets: list[BotCurrencyPair]):
@@ -23,8 +29,8 @@ class BullishContext:
                                                     et retourne une liste de BotCurrencyPair après transformation.
             assets (list[BotCurrencyPair]): La liste des actifs (paires de devises) à transformer.
         """
-        self.__bullish_function = bullish_function  # Stocke la fonction bullish à appliquer
-        self.__assets: list[BotCurrencyPair] = assets  # Stocke la liste des actifs
+        self.bullish_transformation_function = bullish_function  # Stocke la fonction bullish à appliquer
+        self.currency_pairs_assets: list[BotCurrencyPair] = assets  # Stocke la liste des actifs
 
     def __enter__(self) -> List[BotCurrencyPair]:
         """
@@ -33,7 +39,7 @@ class BullishContext:
         Returns:
             List[BotCurrencyPair]: La liste des BotCurrencyPair transformée par la fonction bullish.
         """
-        return self.__bullish_function(self.__assets)  # Applique la fonction bullish et retourne le résultat
+        return self.bullish_transformation_function(self.currency_pairs_assets)  # Applique la fonction bullish et retourne le résultat
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """

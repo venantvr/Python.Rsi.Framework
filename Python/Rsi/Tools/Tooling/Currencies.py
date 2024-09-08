@@ -44,10 +44,10 @@ def gateio_currency_pair(pair_symbol: str, keep_pair_quote: bool, trading_quote)
 
         # Retourne un nouvel objet BotCurrencyPair avec les informations fournies
         return BotCurrencyPair(
-            id=symbol,
-            base=base,
-            quote=quote,
-            directory=directory
+            pair_id=symbol,
+            base_currency=base,
+            quote_currency=quote,
+            data_dir=directory
         )
     else:
         # Retourne None si la base et la quote sont identiques (paire non valide)

@@ -8,10 +8,19 @@ class BotThreadPoolExecutor:
 
     Cette classe permet de gérer un pool de threads pour l'exécution de tâches asynchrones tout en garantissant
     qu'une seule instance de ThreadPoolExecutor est utilisée dans l'application (singleton).
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom             | Nouveau Nom                           | Signification                                                   |
+    |------------------------|---------------------------------------|-----------------------------------------------------------------|
+    | `__instance`           | `singleton_instance`                  | Stocke l'instance unique de la classe                           |
+    | `__lock`               | `instance_creation_lock`              | Verrou pour protéger la création de l'instance (thread-safe)    |
+    | `submit`               | `submit_task`                         | Soumet une tâche à exécuter dans le pool de threads             |
+    | `map`                  | `map_function_to_iterables`           | Applique une fonction de manière concurrente à des itérables    |
+    | `shutdown`             | `terminate_thread_pool`               | Ferme le pool de threads et attend la fin des tâches en cours   |
     """
 
-    __instance = None  # Variable de classe pour stocker l'instance unique
-    __lock = threading.Lock()  # Verrou pour assurer une création d'instance thread-safe
+    singleton_instance = None  # Variable de classe pour stocker l'instance unique
+    instance_creation_lock = threading.Lock()  # Verrou pour assurer une création d'instance thread-safe
 
     def __new__(cls, *args, **kwargs):
         """
@@ -21,11 +30,11 @@ class BotThreadPoolExecutor:
         Retourne :
         instance (BotThreadPoolExecutor) : L'instance unique de la classe.
         """
-        if not cls.__instance:
-            with cls.__lock:  # Assure que la création de l'instance est thread-safe
-                if not cls.__instance:  # Double vérification pour s'assurer qu'aucune autre instance n'a été créée
-                    cls.__instance = super(BotThreadPoolExecutor, cls).__new__(cls)
-        return cls.__instance
+        if not cls.singleton_instance:
+            with cls.instance_creation_lock:  # Assure que la création de l'instance est thread-safe
+                if not cls.singleton_instance:  # Double vérification pour s'assurer qu'aucune autre instance n'a été créée
+                    cls.singleton_instance = super(BotThreadPoolExecutor, cls).__new__(cls)
+        return cls.singleton_instance
 
     def __init__(self, max_workers=None):
         """
@@ -39,7 +48,7 @@ class BotThreadPoolExecutor:
             # Initialise un ThreadPoolExecutor avec le nombre maximum de threads spécifié
             self.executor = ThreadPoolExecutor(max_workers=max_workers)
 
-    def submit(self, func, *args, **kwargs):
+    def submit_task(self, func, *args, **kwargs):
         """
         Soumet une fonction à exécuter dans le pool de threads.
 
@@ -53,7 +62,7 @@ class BotThreadPoolExecutor:
         """
         return self.executor.submit(func, *args, **kwargs)
 
-    def map(self, func, *iterables, timeout=None, chunksize=1):
+    def map_function_to_iterables(self, func, *iterables, timeout=None, chunksize=1):
         """
         Applique une fonction à chaque élément d'un ou plusieurs itérables, de manière concurrente.
 
@@ -68,7 +77,7 @@ class BotThreadPoolExecutor:
         """
         return self.executor.map(func, *iterables, timeout=timeout, chunksize=chunksize)
 
-    def shutdown(self, wait=True):
+    def terminate_thread_pool(self, wait=True):
         """
         Arrête le pool de threads, empêchant toute nouvelle tâche d'être soumise.
 

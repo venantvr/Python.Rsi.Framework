@@ -1,7 +1,5 @@
 from typing import Optional
-
 from gate_api import Order
-
 from Python.Rsi.Tools.Quotes import Price
 
 
@@ -11,6 +9,14 @@ class Track:
 
     Cette classe gère le suivi des ordres d'achat et de vente associés à un bot de trading,
     en conservant l'état de chaque ordre et les prix correspondants.
+
+    ### Correspondance des noms (Ancien → Nouveau → Signification)
+    | Ancien Nom                 | Nouveau Nom                         | Signification                                      |
+    |----------------------------|-------------------------------------|----------------------------------------------------|
+    | `self.order`               | `tracked_order`                     | L'ordre actuellement suivi                         |
+    | `self.price`               | `tracked_price`                     | Le prix associé à l'ordre suivi                    |
+    | `self.buy`                 | `buy_order_tracking`                | Suivi de l'ordre d'achat                           |
+    | `self.sell`                | `sell_order_tracking`               | Suivi de l'ordre de vente                          |
     """
 
     class OrderTrack:
@@ -25,8 +31,8 @@ class Track:
             """
             Initialise une instance de OrderTrack avec un ordre vide et un prix de zéro.
             """
-            self.order: Optional[Order] = None  # Stocke l'objet Order, initialisé à None
-            self.price: Price = Price.ZERO  # Stocke le prix de l'ordre, initialisé à zéro
+            self.tracked_order: Optional[Order] = None  # Stocke l'objet Order, initialisé à None
+            self.tracked_price: Price = Price.ZERO  # Stocke le prix de l'ordre, initialisé à zéro
 
     def __init__(self):
         """
@@ -34,8 +40,8 @@ class Track:
 
         Crée deux instances de OrderTrack pour suivre séparément les ordres d'achat et de vente.
         """
-        self.buy = self.OrderTrack()  # Instance de OrderTrack pour suivre l'ordre d'achat
-        self.sell = self.OrderTrack()  # Instance de OrderTrack pour suivre l'ordre de vente
+        self.buy_order_tracking = self.OrderTrack()  # Instance de OrderTrack pour suivre l'ordre d'achat
+        self.sell_order_tracking = self.OrderTrack()  # Instance de OrderTrack pour suivre l'ordre de vente
 
     def reset(self):
         """
@@ -44,5 +50,5 @@ class Track:
         Met à jour les objets OrderTrack pour que les ordres soient définis sur None,
         indiquant qu'il n'y a actuellement aucun ordre actif suivi.
         """
-        self.buy.order = None  # Réinitialise l'ordre d'achat
-        self.sell.order = None  # Réinitialise l'ordre de vente
+        self.buy_order_tracking.tracked_order = None  # Réinitialise l'ordre d'achat
+        self.sell_order_tracking.tracked_order = None  # Réinitialise l'ordre de vente
