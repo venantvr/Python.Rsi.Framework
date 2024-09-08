@@ -7,7 +7,7 @@ import warnings
 from functools import wraps
 from hashlib import md5
 
-from venantvr.logs import LoggingTools, CurrencyLogger, Rotating, NoUrllib3Warning, NoDeprecationWarning
+from venantvr.logs import LoggingTools, CurrencyLogger, RotatingLogger, NoUrllib3Warning, NoDeprecationWarning
 
 # Ignorer tous les DeprecationWarning
 warnings.filterwarnings('ignore', category=DeprecationWarning)
@@ -119,7 +119,7 @@ if enabled and file != '':
     logging.basicConfig(level=logging_level,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         handlers=[
-                            Rotating(filename=file, when='midnight', interval=1, backup_count=5),
+                            RotatingLogger(filename=file, when='midnight', interval=1, backup_count=5),
                             logging.StreamHandler()
                         ])
 

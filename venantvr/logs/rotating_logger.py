@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from logging.handlers import TimedRotatingFileHandler
 
 
-class Rotating(TimedRotatingFileHandler):
+class RotatingLogger(TimedRotatingFileHandler):
     """
     Sous-classe de TimedRotatingFileHandler pour gérer la rotation des fichiers de log avec un préfixe de date.
 
@@ -15,7 +15,7 @@ class Rotating(TimedRotatingFileHandler):
 
     def __init__(self, filename, when, interval, backup_count=0, encoding=None, delay=False, utc=False, at_time=None):
         """
-        Initialise une nouvelle instance de Rotating.
+        Initialise une nouvelle instance de RotatingLogger.
 
         Args:
             filename (str): Le nom de base du fichier de log.
@@ -32,7 +32,7 @@ class Rotating(TimedRotatingFileHandler):
         self.prefix = None  # Initialise le préfixe à None
         filename = self.compute_filename()  # Calcule le nom de fichier avec préfixe de date
         # Appelle le constructeur de la classe parente avec le nouveau nom de fichier
-        super(Rotating, self).__init__(
+        super(RotatingLogger, self).__init__(
             os.path.join(self.dir_log, filename), when, interval, backup_count, encoding, delay, utc, at_time
         )
 
