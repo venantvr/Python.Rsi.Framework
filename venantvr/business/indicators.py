@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 
-from venantvr.business import BotCurrencyPair
-from venantvr.types import GateioTimeFrame
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.types.types_alias import GateioTimeFrame
 
 
 def replace_nan_values(dataframe_column: Series):

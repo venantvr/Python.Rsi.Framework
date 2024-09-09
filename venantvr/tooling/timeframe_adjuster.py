@@ -2,7 +2,7 @@ import pandas as pd
 from pandas import DataFrame, Timestamp
 from sklearn.preprocessing import MinMaxScaler
 
-from venantvr.types import GateioTimeFrame, CandlesCountLambda
+from venantvr.types.types_alias import GateioTimeFrame, CandlesCountLambda
 
 
 class TimeframeAdjuster:

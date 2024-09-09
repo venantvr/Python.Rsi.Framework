@@ -1,8 +1,8 @@
 import decimal
 from typing import Optional
 
-from venantvr.business import BotCurrencyPair
-from venantvr.quotes import Price
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.quotes.price import Price
 from venantvr.quotes.quotes_utils import create_currency_quote
 
 

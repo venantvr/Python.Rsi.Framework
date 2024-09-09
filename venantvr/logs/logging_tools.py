@@ -1,4 +1,4 @@
-from venantvr.parameters import Parameters
+from venantvr.parameters.parameters import Parameters
 
 
 class LoggingTools:

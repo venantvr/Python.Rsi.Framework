@@ -11,10 +11,10 @@ import numpy as np
 import psutil
 from pandas import DataFrame
 
-from venantvr.quotes import Price
-from venantvr.quotes import file_exists  # Import de la fonction file_exists à partir d'un module spécifique
-from venantvr.tooling import convert_gateio_timeframe_to_pandas
-from venantvr.types import GateioTimeFrame, PandasTimeFrame
+from venantvr.quotes.price import Price
+from venantvr.quotes.quotes_utils import file_exists
+from venantvr.tooling.timeframes_utils import convert_gateio_timeframe_to_pandas
+from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame
 
 
 def resolve_path_json_pairs(script_path, file_name):

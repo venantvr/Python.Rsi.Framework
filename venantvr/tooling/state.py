@@ -1,7 +1,7 @@
 import time
 
-from venantvr.business import BotCurrencyPair
-from venantvr.quotes import Price
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.quotes.price import Price
 
 
 class State:

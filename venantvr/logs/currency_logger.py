@@ -1,7 +1,7 @@
 # Définir une sous-classe de logging.Logger
 import logging
 
-from venantvr.business import BotCurrencyPair
+from venantvr.business.bot_currency_pair import BotCurrencyPair
 
 
 class CurrencyLogger(logging.Logger):

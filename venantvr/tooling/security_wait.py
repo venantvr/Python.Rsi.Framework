@@ -1,6 +1,6 @@
-from venantvr.business import BotCurrencyPair
-from venantvr.logs import logger
-from venantvr.parameters import Parameterized
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.logs.logs_utils import logger
+from venantvr.parameters.parameterized import Parameterized
 
 
 class SecurityWait(Parameterized('bot')):

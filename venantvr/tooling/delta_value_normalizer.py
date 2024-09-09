@@ -1,7 +1,7 @@
 import numpy as np
 from pandas import DataFrame
 
-from venantvr.logs import logger
+from venantvr.logs.logs_utils import logger
 from venantvr.tooling.timeframe_adjuster import TimeframeAdjuster
 
 

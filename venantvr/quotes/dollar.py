@@ -1,4 +1,4 @@
-from venantvr.quotes import Quote
+from venantvr.quotes.quote import Quote
 
 
 class USDT(Quote):

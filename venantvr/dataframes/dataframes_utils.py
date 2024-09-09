@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 
-from venantvr.dataframes import TemporaryColumnsManager
+from venantvr.dataframes.temporary_columns_manager import TemporaryColumnsManager
 
 
 def adjust_column_values_within_limits(dataframe: DataFrame, column: str, lower_limit: float, upper_limit: float, max_iterations=100):

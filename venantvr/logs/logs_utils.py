@@ -7,7 +7,11 @@ import warnings
 from functools import wraps
 from hashlib import md5
 
-from venantvr.logs import LoggingTools, CurrencyLogger, RotatingLogger, NoUrllib3Warning, NoDeprecationWarning
+from venantvr.logs.currency_logger import CurrencyLogger
+from venantvr.logs.logging_tools import LoggingTools
+from venantvr.logs.no_deprecation_warning import NoDeprecationWarning
+from venantvr.logs.no_urllib3_warning import NoUrllib3Warning
+from venantvr.logs.rotating_logger import RotatingLogger
 
 # Ignorer tous les DeprecationWarning
 warnings.filterwarnings('ignore', category=DeprecationWarning)

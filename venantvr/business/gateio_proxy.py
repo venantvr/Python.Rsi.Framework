@@ -10,15 +10,21 @@ import pandas as pd
 from gate_api import Currency, CurrencyPair, Order, ApiException
 from joblib import dump, load
 
-from venantvr.business import BotCurrencyPair
-from venantvr.dataframes import JapaneseDataframe
-from venantvr.logs import logger
-from venantvr.parameters import Parameters
-from venantvr.quotes import base_from_pair, Quote, create_currency_quote, Quantity, Price, Position, quote_currency, file_exists
-from venantvr.tooling import timeframe_to_seconds, round_down, SecurityWait
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.dataframes.japanese_dataframe import JapaneseDataframe
+from venantvr.logs.logs_utils import logger
+from venantvr.parameters.parameters import Parameters
+from venantvr.quotes.position import Position
+from venantvr.quotes.price import Price
+from venantvr.quotes.quantity import Quantity
+from venantvr.quotes.quote import Quote
+from venantvr.quotes.quotes_utils import file_exists, base_from_pair, create_currency_quote, quote_currency
 from venantvr.tooling.database_manager import DatabaseManager
+from venantvr.tooling.security_wait import SecurityWait
 from venantvr.tooling.telegram_notification_service import TelegramNotificationService
-from venantvr.types import GateioTimeFrame
+from venantvr.tooling.timeframes_utils import timeframe_to_seconds
+from venantvr.tooling.tooling_utils import round_down
+from venantvr.types.types_alias import GateioTimeFrame
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 

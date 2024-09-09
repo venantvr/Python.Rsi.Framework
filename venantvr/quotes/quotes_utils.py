@@ -2,9 +2,10 @@ import os
 import time
 from typing import Optional
 
-from venantvr.business import BotCurrencyPair
-from venantvr.parameters import Parameters
-from venantvr.quotes import USDT, BTC  # Import des classes USDT et BTC depuis le module Python.Rsi.venantvr.quotes
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.parameters.parameters import Parameters
+from venantvr.quotes.bitoin import BTC
+from venantvr.quotes.dollar import USDT
 
 
 def base_from_pair(pair: str):

@@ -2,7 +2,7 @@ from typing import Optional
 
 from gate_api import Order
 
-from venantvr.quotes import Price
+from venantvr.quotes.price import Price
 
 
 class Track:

@@ -7,11 +7,11 @@ from typing import Self
 import requests
 import yaml
 
-from venantvr.business import BotCurrencyPair
-from venantvr.business import GateioProxy
-from venantvr.logs import logger
-from venantvr.tooling import resolve_path_json_pairs, gateio_currency_pair
-from venantvr.tooling import verify_pair
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.business.gateio_proxy import GateioProxy
+from venantvr.logs.logs_utils import logger
+from venantvr.quotes.quotes_utils import gateio_currency_pair
+from venantvr.tooling.tooling_utils import resolve_path_json_pairs, verify_pair
 
 
 class ListOfAssets:

@@ -1,6 +1,6 @@
 from typing import Callable, List
 
-from venantvr.business import BotCurrencyPair
+from venantvr.business.bot_currency_pair import BotCurrencyPair
 
 # Définition d'un type pour une fonction qui prend une liste de BotCurrencyPair et retourne une liste de BotCurrencyPair
 BullishFunctionType = Callable[[List[BotCurrencyPair]], List[BotCurrencyPair]]

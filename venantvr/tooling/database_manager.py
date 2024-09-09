@@ -1,11 +1,11 @@
 import sqlite3
 from datetime import datetime, timezone
 
-from venantvr.business import BotCurrencyPair
-from venantvr.logs import logger
-from venantvr.parameters import Parameterized
-from venantvr.quotes import Price
-from venantvr.quotes import gateio_currency_pair
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.logs.logs_utils import logger
+from venantvr.parameters.parameterized import Parameterized
+from venantvr.quotes.price import Price
+from venantvr.quotes.quotes_utils import gateio_currency_pair
 
 
 class DatabaseManager(Parameterized('bot')):

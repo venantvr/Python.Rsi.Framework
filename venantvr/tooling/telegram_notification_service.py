@@ -3,10 +3,10 @@ from typing import Optional
 
 import requests
 
-from venantvr.business import BotCurrencyPair
-from venantvr.logs import code_configuration, log_exception_error
-from venantvr.parameters import Parameterized
-from venantvr.tooling import get_ip_address
+from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.logs.logs_utils import code_configuration, log_exception_error
+from venantvr.parameters.parameterized import Parameterized
+from venantvr.tooling.tooling_utils import get_ip_address
 
 
 class TelegramNotificationService(Parameterized('telegram')):
