@@ -3,6 +3,7 @@ import math
 import os
 import re
 import socket
+import time
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -12,7 +13,6 @@ import psutil
 from pandas import DataFrame
 
 from venantvr.quotes.price import Price
-from venantvr.quotes.quotes_utils import file_exists
 from venantvr.tooling.timeframes_utils import convert_gateio_timeframe_to_pandas
 from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame
 
@@ -187,6 +187,37 @@ def list_diff(list_a: list, list_b: list) -> list:
     """
     # Utiliser la compréhension de liste pour filtrer les éléments
     return [item for item in list_a if item not in list_b]
+
+
+def file_exists(filepath: str, factor: int = 10) -> bool:
+    """
+    Vérifie si un fichier existe et a été modifié dans les dernières '24 * facteur' heures.
+    Si le fichier est plus ancien, il sera supprimé.
+
+    Paramètres :
+    filepath (str) : Le chemin vers le fichier à vérifier.
+    factor (int) : Le facteur multiplicatif pour définir l'âge limite du fichier en heures (par défaut 10).
+
+    Retourne :
+    bool : True si le fichier existe et a été modifié il y a moins de '24 * facteur' heures, False sinon.
+    """
+    output = False
+
+    if os.path.exists(filepath):  # Vérifie si le fichier existe
+        last_modified = os.path.getmtime(filepath)  # Obtient le temps de dernière modification du fichier
+        current_time = time.time()  # Obtient le temps actuel
+        time_difference = current_time - last_modified  # Calcule la différence de temps
+
+        # Convertit la différence de temps en heures
+        hours_difference = time_difference / 3600
+
+        if hours_difference < 24 * factor:  # Vérifie si le fichier a été modifié dans la période limite
+            output = True
+        else:
+            # Supprime le fichier s'il est plus vieux que la période limite
+            os.remove(filepath)
+
+    return output
 
 
 def round_up(value, decimals=4):

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame  # Import des types personnalisés pour les timeframes
+from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame
 
 
 def diviser_timeframe(timeframe: GateioTimeFrame, division: int) -> GateioTimeFrame:

@@ -18,12 +18,12 @@ from venantvr.quotes.position import Position
 from venantvr.quotes.price import Price
 from venantvr.quotes.quantity import Quantity
 from venantvr.quotes.quote import Quote
-from venantvr.quotes.quotes_utils import file_exists, base_from_pair, create_currency_quote, quote_currency
+from venantvr.quotes.quotes_utils import base_from_pair, create_currency_quote, quote_currency
 from venantvr.tooling.database_manager import DatabaseManager
 from venantvr.tooling.security_wait import SecurityWait
 from venantvr.tooling.telegram_notification_service import TelegramNotificationService
 from venantvr.tooling.timeframes_utils import timeframe_to_seconds
-from venantvr.tooling.tooling_utils import round_down
+from venantvr.tooling.tooling_utils import round_down, file_exists
 from venantvr.types.types_alias import GateioTimeFrame
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)

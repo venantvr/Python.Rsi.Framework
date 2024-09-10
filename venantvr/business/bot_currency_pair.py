@@ -12,7 +12,7 @@ from pandas import DataFrame
 from venantvr.events.event_store import EventStore
 from venantvr.events.generic_event import GenericEvent
 from venantvr.quotes.price import Price
-from venantvr.quotes.quotes_utils import file_exists
+from venantvr.tooling.tooling_utils import file_exists
 from venantvr.types.types_alias import GateioTimeFrame
 
 

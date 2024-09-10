@@ -1,5 +1,4 @@
 import os
-import time
 from typing import Optional
 
 from venantvr.business.bot_currency_pair import BotCurrencyPair
@@ -76,37 +75,6 @@ def quote_currency(currency_pair):
     """
     quote = currency_pair.replace('/', '_').replace('-', '_').split('_')[-1]  # Remplace '/' et '-' par '_' et extrait la dernière partie
     return quote.upper()  # Retourne la devise de cotation en majuscules
-
-
-def file_exists(filepath: str, factor: int = 10) -> bool:
-    """
-    Vérifie si un fichier existe et a été modifié dans les dernières '24 * facteur' heures.
-    Si le fichier est plus ancien, il sera supprimé.
-
-    Paramètres :
-    filepath (str) : Le chemin vers le fichier à vérifier.
-    factor (int) : Le facteur multiplicatif pour définir l'âge limite du fichier en heures (par défaut 10).
-
-    Retourne :
-    bool : True si le fichier existe et a été modifié il y a moins de '24 * facteur' heures, False sinon.
-    """
-    output = False
-
-    if os.path.exists(filepath):  # Vérifie si le fichier existe
-        last_modified = os.path.getmtime(filepath)  # Obtient le temps de dernière modification du fichier
-        current_time = time.time()  # Obtient le temps actuel
-        time_difference = current_time - last_modified  # Calcule la différence de temps
-
-        # Convertit la différence de temps en heures
-        hours_difference = time_difference / 3600
-
-        if hours_difference < 24 * factor:  # Vérifie si le fichier a été modifié dans la période limite
-            output = True
-        else:
-            # Supprime le fichier s'il est plus vieux que la période limite
-            os.remove(filepath)
-
-    return output
 
 
 def gateio_currency_pair(pair_symbol: str, keep_pair_quote: bool, trading_quote) -> Optional[BotCurrencyPair]:
