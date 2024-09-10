@@ -1,10 +1,11 @@
 import sys
+import uuid
+from hashlib import md5
 from typing import Optional
 
 import requests
 
 from venantvr.business.bot_currency_pair import BotCurrencyPair
-from venantvr.logs.logs_utils import code_configuration, log_exception_error
 from venantvr.parameters.parameterized import Parameterized
 from venantvr.tooling.tooling_utils import get_ip_address
 
@@ -33,7 +34,7 @@ class TelegramNotificationService(Parameterized('telegram')):
         Initialise l'instance de TelegramNotificationService en chargeant les paramètres de configuration Telegram.
         """
         super().__init__()
-        self.system_code = code_configuration()  # Code de configuration unique pour le système
+        self.system_code = self.code_configuration()  # Code de configuration unique pour le système
         self.api_base_url = self.section['api']  # URL de base de l'API Telegram
         self.bot_token = self.section['token']  # Token du bot Telegram
         self.chat_id = self.section['id']  # ID du chat où envoyer les notifications
@@ -49,6 +50,18 @@ class TelegramNotificationService(Parameterized('telegram')):
         endpoints = self.section['endpoints']
         self.text_endpoint = endpoints['text']  # Point de terminaison pour les messages texte
         self.image_endpoint = endpoints['image']  # Point de terminaison pour les images
+
+    @staticmethod
+    def code_configuration():
+        """
+        Génère un code de configuration unique basé sur l'adresse MAC de la machine.
+
+        Returns:
+            str: Un hachage MD5 tronqué de l'adresse MAC.
+        """
+        mac_address = hex(uuid.getnode()).replace('0x', '').upper()
+        mac_address = ':'.join(mac_address[i:i + 2] for i in range(0, 11, 2))
+        return md5(mac_address.encode('utf-8')).hexdigest().upper()[:2]
 
     def send_text_message(self, currency_pair: Optional[BotCurrencyPair], text_message: str):
         """
@@ -70,7 +83,7 @@ class TelegramNotificationService(Parameterized('telegram')):
             response = requests.get(f'{url}{self.text_endpoint}', params=params)
         except Exception as ex:
             exc_type, exc_value, tb = exc_info = sys.exc_info()
-            log_exception_error(exc_type, exc_value, tb)
+            # log_exception_error(exc_type, exc_value, tb)
 
     def send_image(self, currency_pair: Optional[BotCurrencyPair], image_blob):
         """
@@ -89,4 +102,4 @@ class TelegramNotificationService(Parameterized('telegram')):
             response = requests.post(f'{url}{self.image_endpoint}', data=data, files=files)
         except Exception as ex:
             exc_type, exc_value, tb = exc_info = sys.exc_info()
-            log_exception_error(exc_type, exc_value, tb)
+            # log_exception_error(exc_type, exc_value, tb)

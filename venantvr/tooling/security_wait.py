@@ -1,5 +1,4 @@
 from venantvr.business.bot_currency_pair import BotCurrencyPair
-from venantvr.logs.logs_utils import logger
 from venantvr.parameters.parameterized import Parameterized
 
 
@@ -51,7 +50,7 @@ class SecurityWait(Parameterized('bot')):
         Returns:
             SecurityWait: L'instance actuelle de SecurityWait (pour le chaînage des appels).
         """
-        logger.debug('Ajout de la paire de devises cible à la file d\'attente de sécurité')
+        # logger.debug('Ajout de la paire de devises cible à la file d\'attente de sécurité')
         self.currency_pairs.append(currency_pair.id)  # Ajout de l'ID de la paire de devises à la liste
         return self
 

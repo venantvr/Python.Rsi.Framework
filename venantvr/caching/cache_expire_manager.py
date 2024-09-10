@@ -1,7 +1,7 @@
 from typing import Literal, Optional, Self
 
 from venantvr.caching.cache_expire import CacheExpire
-from venantvr.tooling.timeframes_utils import timeframe_to_seconds, get_seconds_till_close
+from venantvr.tooling.tooling_utils import timeframe_to_seconds, get_seconds_till_close
 from venantvr.types.types_alias import GateioTimeFrame
 
 

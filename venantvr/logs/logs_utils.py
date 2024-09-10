@@ -2,10 +2,8 @@ import logging
 import subprocess
 import threading
 import traceback
-import uuid
 import warnings
 from functools import wraps
-from hashlib import md5
 
 from venantvr.logs.currency_logger import CurrencyLogger
 from venantvr.logs.logging_tools import LoggingTools
@@ -73,18 +71,6 @@ def log_thread_activity(func):
         return result
 
     return wrapper
-
-
-def code_configuration():
-    """
-    Génère un code de configuration unique basé sur l'adresse MAC de la machine.
-
-    Returns:
-        str: Un hachage MD5 tronqué de l'adresse MAC.
-    """
-    mac_address = hex(uuid.getnode()).replace('0x', '').upper()
-    mac_address = ':'.join(mac_address[i:i + 2] for i in range(0, 11, 2))
-    return md5(mac_address.encode('utf-8')).hexdigest().upper()[:2]
 
 
 def get_wifi_name():
