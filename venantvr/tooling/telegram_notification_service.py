@@ -10,6 +10,18 @@ from venantvr.parameters.parameterized import Parameterized
 from venantvr.tooling.tooling_utils import get_ip_address
 
 
+def code_configuration():
+    """
+    Génère un code de configuration unique basé sur l'adresse MAC de la machine.
+
+    Returns:
+        str: Un hachage MD5 tronqué de l'adresse MAC.
+    """
+    mac_address = hex(uuid.getnode()).replace('0x', '').upper()
+    mac_address = ':'.join(mac_address[i:i + 2] for i in range(0, 11, 2))
+    return md5(mac_address.encode('utf-8')).hexdigest().upper()[:2]
+
+
 class TelegramNotificationService(Parameterized('telegram')):
     """
     Classe TelegramNotificationService pour gérer l'envoi de messages et d'images via Telegram.
@@ -34,7 +46,7 @@ class TelegramNotificationService(Parameterized('telegram')):
         Initialise l'instance de TelegramNotificationService en chargeant les paramètres de configuration Telegram.
         """
         super().__init__()
-        self.system_code = self.code_configuration()  # Code de configuration unique pour le système
+        self.system_code = code_configuration()  # Code de configuration unique pour le système
         self.api_base_url = self.section['api']  # URL de base de l'API Telegram
         self.bot_token = self.section['token']  # Token du bot Telegram
         self.chat_id = self.section['id']  # ID du chat où envoyer les notifications
@@ -50,18 +62,6 @@ class TelegramNotificationService(Parameterized('telegram')):
         endpoints = self.section['endpoints']
         self.text_endpoint = endpoints['text']  # Point de terminaison pour les messages texte
         self.image_endpoint = endpoints['image']  # Point de terminaison pour les images
-
-    @staticmethod
-    def code_configuration():
-        """
-        Génère un code de configuration unique basé sur l'adresse MAC de la machine.
-
-        Returns:
-            str: Un hachage MD5 tronqué de l'adresse MAC.
-        """
-        mac_address = hex(uuid.getnode()).replace('0x', '').upper()
-        mac_address = ':'.join(mac_address[i:i + 2] for i in range(0, 11, 2))
-        return md5(mac_address.encode('utf-8')).hexdigest().upper()[:2]
 
     def send_text_message(self, currency_pair: Optional[BotCurrencyPair], text_message: str):
         """
