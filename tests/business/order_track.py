@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 
 from gate_api import Order
 
-from venantvr.business.order_track import Track
-from venantvr.quotes.price import Price
+from framework.business.order_track import Track
+from framework.quotes.price import Price
 
 
 class TestTrack(unittest.TestCase):

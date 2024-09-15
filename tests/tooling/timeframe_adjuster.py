@@ -2,8 +2,8 @@ import unittest
 
 import pandas as pd
 
-from venantvr.tooling.timeframe_adjuster import TimeframeAdjuster
-from venantvr.types.types_alias import GateioTimeFrame
+from framework.tooling.timeframe_adjuster import TimeframeAdjuster
+from framework.types.types_alias import GateioTimeFrame
 
 
 class TestTimeframeAdjuster(unittest.TestCase):

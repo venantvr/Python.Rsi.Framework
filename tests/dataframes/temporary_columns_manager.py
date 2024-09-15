@@ -2,7 +2,7 @@ import unittest
 
 from pandas import DataFrame
 
-from venantvr.dataframes.temporary_columns_manager import TemporaryColumnsManager
+from framework.dataframes.temporary_columns_manager import TemporaryColumnsManager
 
 
 class TestTemporaryColumnsManager(unittest.TestCase):

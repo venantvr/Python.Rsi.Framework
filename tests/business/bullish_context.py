@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
 
-from venantvr.business.bot_currency_pair import BotCurrencyPair
-from venantvr.business.bullish_context import BullishContext
+from framework.business.bot_currency_pair import BotCurrencyPair
+from framework.business.bullish_context import BullishContext
 
 
 class TestBullishContext(unittest.TestCase):

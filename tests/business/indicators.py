@@ -4,9 +4,9 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 
-from venantvr.business.bot_currency_pair import BotCurrencyPair
-from venantvr.business.indicators import replace_nan_values, calculate_relative_strength_index, calculate_exponential_moving_average, calculate_hourly_volume
-from venantvr.types.types_alias import GateioTimeFrame
+from framework.business.bot_currency_pair import BotCurrencyPair
+from framework.business.indicators import replace_nan_values, calculate_relative_strength_index, calculate_exponential_moving_average, calculate_hourly_volume
+from framework.types.types_alias import GateioTimeFrame
 
 
 class TestFunctions(unittest.TestCase):

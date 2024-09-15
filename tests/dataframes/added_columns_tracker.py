@@ -2,7 +2,7 @@ import unittest
 
 from pandas import DataFrame
 
-from venantvr.dataframes.added_columns_tracker import AddedColumnsTracker
+from framework.dataframes.added_columns_tracker import AddedColumnsTracker
 
 
 class TestAddedColumnsTracker(unittest.TestCase):

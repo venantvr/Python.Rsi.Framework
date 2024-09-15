@@ -1,8 +1,8 @@
 import unittest
 
-from venantvr.quotes.bitoin import BTC
-from venantvr.quotes.dollar import USDT
-from venantvr.quotes.quotes_utils import base_from_pair, quote_from_pair, create_currency_quote, quote_currency
+from framework.quotes.bitoin import BTC
+from framework.quotes.dollar import USDT
+from framework.quotes.quotes_utils import base_from_pair, quote_from_pair, create_currency_quote, quote_currency
 
 
 class TestQuotesUtils(unittest.TestCase):
