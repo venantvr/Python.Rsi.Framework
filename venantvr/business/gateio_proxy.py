@@ -78,8 +78,8 @@ class GateioProxy:
     def cancel_order(self, currency_pair: BotCurrencyPair, order: Order):
         # Log de l'annulation de l'ordre
         order_id = self.get_order_id(order)
-        logger.log_warning_for(currency_pair=currency_pair,
-                               message=f'Ordre annulé avec succès. ID de l\'ordre: {order_id}')
+        logger.log_currency_warning(currency_pair=currency_pair,
+                                    message=f'Ordre annulé avec succès. ID de l\'ordre: {order_id}')
 
         return self.spot_api_instance.cancel_order(order_id, currency_pair.id)
 
@@ -109,7 +109,7 @@ class GateioProxy:
             amount_precision = int(self.trading_pairs_dictionnary[currency_pair.id].amount_precision)
         else:
             amount_precision = 256
-        logger.log_warning_for(currency_pair, f'Précision de la base {amount_precision}')
+        logger.log_currency_warning(currency_pair, f'Précision de la base {amount_precision}')
         return amount_precision
 
     # Fonction pour obtenir la précision d'une paire de trading
@@ -122,7 +122,7 @@ class GateioProxy:
             precision = int(self.trading_pairs_dictionnary[currency_pair.id].precision)
         else:
             precision = 256
-        logger.log_info_for(currency_pair, f'Précision de quotation {precision}')
+        logger.log_currency_info(currency_pair, f'Précision de quotation {precision}')
         return precision
 
     def token_min_quote_amount(self, currency_pair: BotCurrencyPair) -> Quote:
@@ -132,7 +132,7 @@ class GateioProxy:
             min_amount = 0.0
         output: Quote = create_currency_quote(amount=min_amount,
                                               quote=self.quote)
-        logger.log_warning_for(currency_pair, f'Quantité minimale de vente {output}')
+        logger.log_currency_warning(currency_pair, f'Quantité minimale de vente {output}')
         return output
 
     @classmethod
@@ -209,17 +209,17 @@ class GateioProxy:
             # Placer l'ordre
             result = self.spot_api_instance.create_order(order)
             message = f'Ordre {side} créé avec succès. ID de l\'ordre : {result.id}'
-            logger.log_warning_for(currency_pair=currency_pair,
-                                   message=message)
+            logger.log_currency_warning(currency_pair=currency_pair,
+                                        message=message)
             self.telegram_service.chat(currency_pair=currency_pair,
                                        message=message)
             return result
         except ApiException as e:
-            logger.log_warning_for(currency_pair=currency_pair,
-                                   message=f'Une erreur est survenue lors de la création de l\'ordre {side} : {e}\n')
+            logger.log_currency_warning(currency_pair=currency_pair,
+                                        message=f'Une erreur est survenue lors de la création de l\'ordre {side} : {e}\n')
 
     def place_conditional_sell_order(self, currency_pair: BotCurrencyPair, quantity: Optional[Quantity], price: Price) -> Optional[Order]:
-        logger.log_warning_for(currency_pair, 'Création d\'un ordre de vente')
+        logger.log_currency_warning(currency_pair, 'Création d\'un ordre de vente')
         order: Optional[Order] = None
         if (quantity > Quantity.ZERO or self.debug) and price > Price.ZERO:  # On fait "comme si" pour débugger...
             order = self.__place_order(currency_pair=currency_pair,
@@ -229,7 +229,7 @@ class GateioProxy:
         return order  # Sortir le nombre d'unités achetées
 
     def place_conditional_buy_order(self, currency_pair: BotCurrencyPair, price: Price, free_slots: int = 0) -> Optional[Order]:
-        logger.log_warning_for(currency_pair, 'Création d\'un order d\'achat')
+        logger.log_currency_warning(currency_pair, 'Création d\'un order d\'achat')
         order: Optional[Order] = None
         quote = self.quote_position()
         quote_balance: Quote = create_currency_quote(amount=quote.amount,
@@ -246,7 +246,7 @@ class GateioProxy:
         return order
 
     def create_market_sell_order(self, currency_pair: BotCurrencyPair, token_balance: Quantity = None, token_price_quote: Price = None) -> Optional[Order]:
-        logger.log_warning_for(currency_pair, 'Création d\'un ordre de vente')
+        logger.log_currency_warning(currency_pair, 'Création d\'un ordre de vente')
         pair_precision = self.base_quantity_precision(currency_pair=currency_pair)
         if token_balance > Quantity.ZERO or self.debug:  # On fait "comme si" pour débugger...
             if token_price_quote is None:
@@ -267,7 +267,7 @@ class GateioProxy:
                         response_from_server: Order = self.spot_api_instance.create_order(order)
                         logger.info(f'{response_from_server}')
                         output, status = self.wait_for_order(currency_pair=currency_pair, order=response_from_server)
-                        logger.log_warning_for(currency_pair, f'Ordre de vente {token_balance} : {status}')
+                        logger.log_currency_warning(currency_pair, f'Ordre de vente {token_balance} : {status}')
                     else:
                         output = order
                         output.status = 'closed'
@@ -275,17 +275,17 @@ class GateioProxy:
                         logger.warning(f'Emission d\'ordres de vente désactivée : {accepted_amount_token}')
                 else:
                     output = None
-                    logger.log_warning_for(currency_pair, f'Impossible de vendre {accepted_amount_token}')
+                    logger.log_currency_warning(currency_pair, f'Impossible de vendre {accepted_amount_token}')
             else:
                 output = None
-                logger.log_warning_for(currency_pair, 'Erreur de prix')
+                logger.log_currency_warning(currency_pair, 'Erreur de prix')
         else:
             output = None
-            logger.log_warning_for(currency_pair, f'Impossible de vendre {token_balance}')
+            logger.log_currency_warning(currency_pair, f'Impossible de vendre {token_balance}')
         return output
 
     def create_market_buy_order(self, currency_pair: BotCurrencyPair, quote_balance: Quote = None, free_slots: int = 0) -> Optional[Order]:
-        logger.log_warning_for(currency_pair, 'Création d\'un order d\'achat')
+        logger.log_currency_warning(currency_pair, 'Création d\'un order d\'achat')
         """
         Précision des montants pour USDT dans la paire cible... quotation.
         """
@@ -304,15 +304,15 @@ class GateioProxy:
                 response_from_server: Order = self.spot_api_instance.create_order(order)
                 logger.info(f'{response_from_server}')
                 output, status = self.wait_for_order(currency_pair=currency_pair, order=response_from_server)
-                logger.log_warning_for(currency_pair, f'Ordre d\'achat {adjusted_amount} : {status}')
+                logger.log_currency_warning(currency_pair, f'Ordre d\'achat {adjusted_amount} : {status}')
             else:
                 output = order
                 output.status = 'closed'
                 output.price, _ = self.get_buy_price(currency_pair=currency_pair)
-                logger.log_warning_for(currency_pair, f'Emission d\'ordres d\'achat désactivée {adjusted_amount}')
+                logger.log_currency_warning(currency_pair, f'Emission d\'ordres d\'achat désactivée {adjusted_amount}')
         else:
             output = None
-            logger.log_warning_for(currency_pair, f'Impossible d\'acheter avec {quote_balance}')
+            logger.log_currency_warning(currency_pair, f'Impossible d\'acheter avec {quote_balance}')
         return output
 
     def list_spot_accounts(self, currency=None):
@@ -337,7 +337,7 @@ class GateioProxy:
             while len(api_responses) < number_of_candles:
                 result = self.spot_api_instance.list_candlesticks(currency_pair.id, interval=interval, limit=limit_per_call, _from=from_time)
                 if not result:
-                    logger.log_warning_for(currency_pair, 'Aucune donnée supplémentaire récupérée')
+                    logger.log_currency_warning(currency_pair, 'Aucune donnée supplémentaire récupérée')
                     break
 
                 api_responses.extend(result)
@@ -347,7 +347,7 @@ class GateioProxy:
                 from_time = int(result[0][0]) - limit_per_call * timeframe_to_seconds(interval)
 
                 if len(result) < limit_per_call:
-                    logger.log_info_for(currency_pair, 'Fin des données disponibles atteinte')
+                    logger.log_currency_info(currency_pair, 'Fin des données disponibles atteinte')
                     break
             # Trier les données récupérées par timestamp
             api_responses = sorted(api_responses, key=lambda x: x[0])
@@ -362,7 +362,7 @@ class GateioProxy:
                 currency_pair.save_raw_dataframe(output, interval)
 
         except ApiException as e:
-            logger.log_warning_for(currency_pair, f'Exception lors de l\'appel à list_candlesticks: {e}')
+            logger.log_currency_warning(currency_pair, f'Exception lors de l\'appel à list_candlesticks: {e}')
 
         return output
 
@@ -428,7 +428,7 @@ class GateioProxy:
     def sell(self, currency_pair: BotCurrencyPair) -> (bool, Price):
         # noinspection PyUnusedLocal
         sell_price: Price = Price.ZERO
-        logger.log_warning_for(currency_pair, f'Méthode {type(self).__name__} \'sell\'')
+        logger.log_currency_warning(currency_pair, f'Méthode {type(self).__name__} \'sell\'')
         position = self.token_position(token=currency_pair.base)
         token_balance = Quantity(currency_pair=currency_pair, quantity=position.amount)
         if token_balance > Quantity.ZERO or self.debug:  # On fait "comme si" pour débugger...
@@ -438,22 +438,22 @@ class GateioProxy:
             if sell_order_fulfilled is not None:
                 sell_price = Price(price=float(sell_order_fulfilled.price),
                                    quote=self.quote)
-                logger.log_warning_for(currency_pair, f'Vente {currency_pair.id} à {sell_price}')
+                logger.log_currency_warning(currency_pair, f'Vente {currency_pair.id} à {sell_price}')
                 successful = True
             else:
                 sell_price = Price.ZERO
-                logger.log_warning_for(currency_pair, f'Vente {currency_pair.id} impossible')
+                logger.log_currency_warning(currency_pair, f'Vente {currency_pair.id} impossible')
                 successful = False
         else:
             sell_price = Price.ZERO
-            logger.log_warning_for(currency_pair, 'Quantité insuffisante pour vendre')
+            logger.log_currency_warning(currency_pair, 'Quantité insuffisante pour vendre')
             successful = False
         return successful, sell_price
 
     def buy(self, currency_pair: BotCurrencyPair, free_slots: int, advisor: Optional[type]) -> (bool, Price):  # 16/03/2024
         # noinspection PyUnusedLocal
         buy_price: Price = Price.ZERO
-        logger.log_warning_for(currency_pair, f'Méthode {type(self).__name__} \'release\'')
+        logger.log_currency_warning(currency_pair, f'Méthode {type(self).__name__} \'release\'')
         quote = self.quote_position()
         quote_balance: Quote = create_currency_quote(amount=quote.amount,
                                                      quote=self.quote)
@@ -481,7 +481,7 @@ class GateioProxy:
                 successful = False
         else:
             buy_price = Price.ZERO
-            logger.log_warning_for(currency_pair, 'Balance insuffisante pour acheter')
+            logger.log_currency_warning(currency_pair, 'Balance insuffisante pour acheter')
             successful = False
         return successful, buy_price
 
@@ -525,7 +525,7 @@ class GateioProxy:
             average_ask_price = round(average_ask_price, precision)
 
         except ApiException as e:
-            logger.log_warning_for(currency_pair, f'Exception when calling API: %s\n' % e)
+            logger.log_currency_warning(currency_pair, f'Exception when calling API: %s\n' % e)
         return average_bid_price, average_ask_price
 
     def get_buy_price(self, currency_pair: BotCurrencyPair) -> (str, Price):

@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 
 from venantvr.business.bot_currency_pair import BotCurrencyPair
+from venantvr.tooling.tooling_utils import timeframe_to_seconds
 from venantvr.types.types_alias import GateioTimeFrame
 
 
@@ -102,7 +103,8 @@ def calculate_exponential_moving_average(dataframe: DataFrame, price_columns: li
     else:
         adjusted_dataframe[main_price_column] = dataframe[price_columns].mean(axis=1).fillna(0.0)
 
-    return adjusted_dataframe.ta.ema(length=period_length).fillna(0.0)
+    return adjusted_dataframe.ewm(span=period_length, adjust=False).mean().fillna(0.0)
+    # return ta.ema(adjusted_dataframe, length=period_length).fillna(0.0)
 
 
 def calculate_hourly_volume(currency_pair: BotCurrencyPair, dataframe: DataFrame, rsi_column: str, current_time: datetime, timeframe: GateioTimeFrame,
@@ -134,24 +136,35 @@ def calculate_hourly_volume(currency_pair: BotCurrencyPair, dataframe: DataFrame
     Returns:
         tuple: Un tuple contenant le volume normalisé et le volume moyen.
     """
-    reference_timeframe = (dataframe.index[-1] - dataframe.index[0]) / (len(dataframe) - 1)
-    total_seconds_in_timeframe = reference_timeframe.total_seconds()
 
-    elapsed_time_in_candle = (current_time - dataframe.index[-1]) % reference_timeframe
+    # Utilisation de la durée du timeframe pour garantir un calcul robuste
+    total_seconds_in_timeframe = timeframe_to_seconds(timeframe)
+
+    # Calcul du temps écoulé dans la dernière bougie
+    elapsed_time_in_candle = (current_time - dataframe.index[-1]) % timedelta(seconds=total_seconds_in_timeframe)
     elapsed_time_in_seconds = elapsed_time_in_candle.total_seconds()
 
+    # Obtenir les valeurs actuelles du RSI et du volume de trading
     current_rsi_value = dataframe[rsi_column].iloc[-1]
-    current_trading_volume = dataframe.volume.iloc[-1]
+    current_trading_volume = dataframe['volume'].iloc[-1]
 
-    normalized_volume_per_second = total_seconds_in_timeframe * (current_trading_volume / elapsed_time_in_seconds)
+    # Gestion du cas où elapsed_time_in_seconds est égal à 0 (bougie complète)
+    if elapsed_time_in_seconds == 0:
+        normalized_volume_per_second = current_trading_volume  # Utiliser le dernier volume fourni
+    else:
+        # Calcul du volume normalisé par seconde si la bougie n'est pas complète
+        normalized_volume_per_second = total_seconds_in_timeframe * (current_trading_volume / elapsed_time_in_seconds)
 
+    # Filtrer les segments basés sur le RSI avec la tolérance définie
     filtered_rsi_segment = dataframe[
         (dataframe[rsi_column] >= current_rsi_value - tolerance_bandwidth) &
         (dataframe[rsi_column] <= current_rsi_value + tolerance_bandwidth)
     ]
 
-    mean_filtered_volume = filtered_rsi_segment.volume.mean()
+    # Calcul du volume moyen des segments filtrés, retourner 0 si aucune valeur n'est trouvée (éviter NaN)
+    mean_filtered_volume = filtered_rsi_segment['volume'].mean() or 0
 
+    # Retourner le volume normalisé et le volume moyen filtré
     return normalized_volume_per_second, mean_filtered_volume
 
 
