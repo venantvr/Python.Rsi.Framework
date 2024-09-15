@@ -13,7 +13,7 @@ import psutil
 from pandas import DataFrame
 
 from venantvr.quotes.price import Price
-from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame
+from venantvr.types.types_alias import GateioTimeFrame, PandasTimeFrame, NumberOrPrice
 
 
 def convert_gateio_timeframe_to_pandas(timeframe: GateioTimeFrame) -> PandasTimeFrame:
@@ -327,7 +327,7 @@ def calculate_max_quote_index(percentage: str):
     return convert_percentage_to_decimal(percentage) / 100.0
 
 
-def calculate_percentage(a: float | Price, b: float | Price) -> float:
+def calculate_percentage(a: NumberOrPrice, b: NumberOrPrice) -> float:
     """
     Calcule le pourcentage de `a` par rapport à `b`.
 
@@ -337,11 +337,21 @@ def calculate_percentage(a: float | Price, b: float | Price) -> float:
 
     Returns:
         float: Le pourcentage de `a` par rapport à `b`.
+
+    Raises:
+        ValueError: Si `b` est zéro.
     """
+    # Si a ou b est une instance de Price, on récupère la valeur 'price'
     if isinstance(a, Price):
         a = a.price
     if isinstance(b, Price):
         b = b.price
+
+    # Vérification que 'b' n'est pas égal à zéro pour éviter la division par zéro
+    if b == 0:
+        raise ValueError("Le second argument 'b' ne peut pas être zéro lors du calcul du pourcentage.")
+
+    # Calcul du pourcentage
     return round(100.0 * a / b, 2)
 
 

@@ -1,4 +1,4 @@
-from typing import NewType, Callable, Optional
+from typing import NewType, Callable, Optional, Union
 
 from gate_api import CurrencyPair
 from pandas import DataFrame
@@ -15,3 +15,5 @@ PandasTimeFrame = NewType('PandasTimeFrame', str)
 
 CandlesCountLambda = Callable[[Optional[CurrencyPair], GateioTimeFrame], int]
 DataframeLambda = Callable[[CurrencyPair, DataFrame, GateioTimeFrame], DataFrame]
+
+NumberOrPrice = Union[float, 'Price']
